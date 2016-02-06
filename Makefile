@@ -13,11 +13,10 @@
 # -------------Compilateur------------------#
 CC		=	gcc
 #--------------Name-------------------------#
-NAME	=	fdf
+# NAME	=	draw
 MYPATH	=	$(HOME)
 #--------------Sources----------------------#
-FILES	=	describe.c					\
-			scene.c						\
+FILES	=	scene.c						\
 			tools.c						\
 			scene/describe.c			\
 			plane/describe.c			\
@@ -25,44 +24,55 @@ FILES	=	describe.c					\
 			cylinder/describe.c			\
 			cone/describe.c
 
+DRAW_FILES		=	draw.c
+CREATE_FILES	=	create.c
+DESCRIBE_FILES	=	describe.c
+
 INC		=	-I./include
 CCFLAGS	=	-Wall -Wextra -Werror -g
 LDFLAGS	=	
 
-SRCS	=	$(addprefix srcs/, $(FILES))
-OBJS	=	$(SRCS:.c=.o)
+SRCS	=			$(addprefix srcs/, $(FILES))
+OBJS	=			$(SRCS:.c=.o)
+DRAW_SRCS		=	$(addprefix srcs/, $(DRAW_FILES))
+DRAW_OBJS		=	$(DRAW_SRCS:.c=.o)
+CREATE_SRCS		=	$(addprefix srcs/, $(CREATE_FILES))
+CREATE_OBJS		=	$(CREATE_SRCS:.c=.o)
+DESCRIBE_SRCS	=	$(addprefix srcs/, $(DESCRIBE_FILES))
+DESCRIBE_OBJS	=	$(DESCRIBE_SRCS:.c=.o)
+
 
 #--------------Actions----------------------#
 
-.PHONY: MLX $(NAME) clean fclean re create describe
+.PHONY: MLX $(NAME) clean fclean re create describe draw
 
-all: $(NAME)
+all: $(NAME) draw create describe
 
 MLX:
-	ls
 
-$(NAME): MLX $(OBJS)
-	$(CC) $(CCFLAGS) $(LDFLAGS) $(INC) $(OBJS) -o $(NAME) -O3
+$(NAME): create
+	describe
+	draw
 
-create:
-	$(CC) $(CCFLAGS) $(LDFLAGS) $(INC) $(OBJS) -o create -O3
+draw: $(OBJS) $(DRAW_OBJS)
+	$(CC) $(CCFLAGS) $(LDFLAGS) $(INC) $(OBJS) $(DRAW_OBJS) -o draw -O3
 
-describe:
-	$(CC) $(CCFLAGS) $(LDFLAGS) $(INC) $(OBJS) -o describe -O3
+create: $(OBJS) $(CREATE_OBJS)
+	$(CC) $(CCFLAGS) $(LDFLAGS) $(INC) $(OBJS) $(CREATE_OBJS) -o create -O3
 
-draw:
-	$(CC) $(CCFLAGS) $(LDFLAGS) $(INC) $(OBJS) -o draw -O3
+describe: $(OBJS) $(DESCRIBE_OBJS)
+	$(CC) $(CCFLAGS) $(LDFLAGS) $(INC) $(OBJS) $(DESCRIBE_OBJS) -o describe -O3
 
 %.o: %.c
 	$(CC) $(CCFLAGS) -c  $(INC) $< -o $@
 	
 clean:
-	make clean -C minilibx_macos
 	rm -f $(OBJS)
+	rm -f $(DRAW_OBJS)
+	rm -f $(CREATE_OBJS)
+	rm -f $(DESCRIBE_OBJS)
 	
 fclean:	clean
-	make clean -C minilibx_macos
-	rm -f $(NAME)
+	rm -f create.exe describe.exe draw.exe
 
 re: fclean all
-	make re -C minilibx_macos
