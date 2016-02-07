@@ -46,6 +46,16 @@ float			vec3_dot(const t_vec3 vec1, const t_vec3 vec2)
 	return (vec1.x * vec2.x + vec1.y * vec2.y + vec1.z * vec2.z);
 }
 
+t_vec3			vec3_cross(const t_vec3 vec1, const t_vec3 vec2)
+{
+	t_vec3		ret;
+
+	ret.x = vec1.x * vec2.x;
+	ret.y = vec1.y * vec2.y;
+	ret.z = vec1.z * vec2.z;
+	return (ret);
+}
+
 void			vec3_describe(const t_vec3 vec)
 {
 	dprintf(1, "(%f %f %f)", vec.x, vec.y, vec.z);

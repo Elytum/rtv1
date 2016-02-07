@@ -39,9 +39,11 @@ void	create_materials(int fd)
 	add_element(fd, &m, sizeof(m));
 	m.r = 0.0;
 	m.b = 1.0;
+	m.c = 1.5;
 	add_element(fd, &m, sizeof(m));
 	m.r = 1.0;
 	m.g = 0.0;
+	m.c = 0.0;
 	add_element(fd, &m, sizeof(m));
 }
 
