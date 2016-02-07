@@ -1,19 +1,40 @@
 #ifndef FORMS_H
 # define FORMS_H
 
+#include <vec3.h>
+
+typedef struct	s_material
+{
+	float		r;
+	float		g;
+	float		b;
+	float		c;
+}				t_material;
+
+typedef struct	s_light
+{
+	t_vec3		pos;
+	float		r;
+	float		g;
+	float		b;
+}				t_light;
+
 typedef struct	s_plane
 {
 	float		x;
 	float		y;
 	float		z;
+	int			m;
 }				t_plane;
 
 typedef struct	s_sphere
 {
-	float		x;
-	float		y;
-	float		z;
+	// float		x;
+	// float		y;
+	// float		z;
+	t_vec3		center;
 	float		r;
+	int			m;
 }				t_sphere;
 
 typedef struct	s_cylinder
@@ -25,6 +46,7 @@ typedef struct	s_cylinder
 	float		y2;
 	float		z2;
 	float		r;
+	int			m;
 }				t_cylinder;
 
 typedef struct	s_cone
@@ -37,8 +59,11 @@ typedef struct	s_cone
 	float		y2;
 	float		z2;
 	float		r2;
+	int			m;
 }				t_cone;
 
+#define MATERIALS_INTRO "Materials:\n"
+#define LIGHTS_INTRO "Lights:\n"
 #define PLANES_INTRO "Planes:\n"
 #define SPHERES_INTRO "Spheres:\n"
 #define CYLINDERS_INTRO "Cylinders:\n"

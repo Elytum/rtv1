@@ -21,7 +21,7 @@ int		main(int ac, char **av)
 	}
 	init_scene(fd, &scene);
 	close(fd);
-	descibe_scene(scene);
+	describe_scene(scene);
 	delete_scene(scene);
 	return (0);
 }

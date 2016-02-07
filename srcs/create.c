@@ -19,11 +19,49 @@ void	create_header(int fd)
 	h.camera_x = 0.1;
 	h.camera_y = 1.0;
 	h.camera_z = 2.1;
-	h.planes_nb = 3;
+	h.materials_nb = 3;
+	h.lights_nb = 2;
+	h.planes_nb = 0;
 	h.spheres_nb = 3;
-	h.cylinders_nb = 3;
-	h.cones_nb = 3;
+	h.cylinders_nb = 0;
+	h.cones_nb = 0;
 	write(fd, &h, sizeof(h));
+}
+
+void	create_materials(int fd)
+{
+	t_material	m;
+
+	m.r = 1.0;
+	m.g = 1.0;
+	m.b = 0.0;
+	m.c = 0.5;
+	add_element(fd, &m, sizeof(m));
+	m.r = 0.0;
+	m.b = 1.0;
+	add_element(fd, &m, sizeof(m));
+	m.r = 1.0;
+	m.g = 0.0;
+	add_element(fd, &m, sizeof(m));
+}
+
+void	create_lights(int fd)
+{
+	t_light		l;
+
+	l.pos.x = 0.0;
+	l.pos.y = 240.0;
+	l.pos.z = -100.0;
+	l.r = 1.0;
+	l.g = 1.0;
+	l.b = 1.0;
+	add_element(fd, &l, sizeof(l));
+	l.pos.x = 640.0;
+	l.pos.z = -10000.0;
+	l.r = 0.6;
+	l.g = 0.7;
+	l.b = 1.0;
+	add_element(fd, &l, sizeof(l));
 }
 
 void	create_planes(int fd)
@@ -33,10 +71,13 @@ void	create_planes(int fd)
 	s.x = 1.2;
 	s.y = 2.3;
 	s.z = 3.4;
+	s.m = 0;
 	add_element(fd, &s, sizeof(s));
 	s.y = 5.5;
+	s.m = 1;
 	add_element(fd, &s, sizeof(s));
 	s.x = 6.5;
+	s.m = 2;
 	add_element(fd, &s, sizeof(s));
 }
 
@@ -44,14 +85,19 @@ void	create_spheres(int fd)
 {
 	t_sphere	s;
 
-	s.x = 1.2;
-	s.y = 2.3;
-	s.z = 3.4;
-	s.r = 4.5;
+	s.center.x = 233.0;
+	s.center.y = 290.0;
+	s.center.z = 0.0;
+	s.r = 100;
+	s.m = 0;
 	add_element(fd, &s, sizeof(s));
-	s.r = 5.5;
+	s.center.x = 407.0;
+	s.center.y = 290.0;
+	s.m = 1;
 	add_element(fd, &s, sizeof(s));
-	s.r = 6.5;
+	s.center.x = 320.0;
+	s.center.y = 140.0;
+	s.m = 2;
 	add_element(fd, &s, sizeof(s));
 }
 
@@ -66,6 +112,7 @@ void	create_cylinders(int fd)
 	s.y2 = 5.6;
 	s.z2 = 6.7;
 	s.r = 7.8;
+	s.m = 0;
 	add_element(fd, &s, sizeof(s));
 	s.r = 5.5;
 	add_element(fd, &s, sizeof(s));
@@ -85,6 +132,7 @@ void	create_cones(int fd)
 	s.y2 = 5.6;
 	s.z2 = 6.7;
 	s.r2 = 8.9;
+	s.m = 0;
 	add_element(fd, &s, sizeof(s));
 	s.r1 = 5.5;
 	add_element(fd, &s, sizeof(s));
@@ -95,10 +143,12 @@ void	create_cones(int fd)
 void	create_sceen(int fd)
 {
 	create_header(fd);
-	create_planes(fd);
+	create_materials(fd);
+	create_lights(fd);
+	// create_planes(fd);
 	create_spheres(fd);
-	create_cylinders(fd);
-	create_cones(fd);
+	// create_cylinders(fd);
+	// create_cones(fd);
 }
 
 int		main(int ac, char **av)

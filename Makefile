@@ -19,18 +19,22 @@ MYPATH	=	$(HOME)
 FILES	=	scene.c						\
 			tools.c						\
 			scene/describe.c			\
+			material/describe.c			\
+			light/describe.c			\
 			plane/describe.c			\
 			sphere/describe.c			\
 			cylinder/describe.c			\
+			vec/vec3.c					\
+			ray/ray.c					\
 			cone/describe.c
 
 DRAW_FILES		=	draw.c
 CREATE_FILES	=	create.c
 DESCRIBE_FILES	=	describe.c
 
-INC		=	-I./include
+INC		=	-I./include -I./minilibx
 CCFLAGS	=	-Wall -Wextra -Werror -g
-LDFLAGS	=	
+LDFLAGS	=	-lmlx -L/usr/include/../lib -lXext -lX11 -lm
 
 SRCS	=			$(addprefix srcs/, $(FILES))
 OBJS	=			$(SRCS:.c=.o)
@@ -44,18 +48,20 @@ DESCRIBE_OBJS	=	$(DESCRIBE_SRCS:.c=.o)
 
 #--------------Actions----------------------#
 
-.PHONY: MLX $(NAME) clean fclean re create describe draw
+.PHONY: MLX MLX_RE $(NAME) clean fclean re create describe draw
 
 all: $(NAME) draw create describe
 
 MLX:
+	make -C minilibx
 
-$(NAME): create
+$(NAME): MLX
+	create
 	describe
 	draw
 
 draw: $(OBJS) $(DRAW_OBJS)
-	$(CC) $(CCFLAGS) $(LDFLAGS) $(INC) $(OBJS) $(DRAW_OBJS) -o draw -O3
+	$(CC) $(CCFLAGS) $(LDFLAGS) $(INC) $(OBJS) $(DRAW_OBJS) minilibx/libmlx_Linux.a -o draw -O3
 
 create: $(OBJS) $(CREATE_OBJS)
 	$(CC) $(CCFLAGS) $(LDFLAGS) $(INC) $(OBJS) $(CREATE_OBJS) -o create -O3
@@ -67,12 +73,13 @@ describe: $(OBJS) $(DESCRIBE_OBJS)
 	$(CC) $(CCFLAGS) -c  $(INC) $< -o $@
 	
 clean:
+	make clean -C minilibx
 	rm -f $(OBJS)
 	rm -f $(DRAW_OBJS)
 	rm -f $(CREATE_OBJS)
 	rm -f $(DESCRIBE_OBJS)
 	
 fclean:	clean
-	rm -f create.exe describe.exe draw.exe
+	rm -f create describe draw
 
 re: fclean all

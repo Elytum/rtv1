@@ -8,8 +8,13 @@ void	describe_spheres(t_scene scene)
 	i = 0;
 	while (i < scene.spheres_nb)
 	{
-		printf("\t(%f, %f, %f) %f\n",
-			scene.spheres[i].x, scene.spheres[i].y, scene.spheres[i].z, scene.spheres[i].r);
+		write(1, "\t", 1);
+		vec3_describe(scene.spheres[i].center);
+		dprintf(1, " %f %i", scene.spheres[i].r, scene.spheres[i].m);
+		write(1, "\n", 1);
+		// printf("\t(%f, %f, %f) %f %i\n",
+		// 	scene.spheres[i].x, scene.spheres[i].y, scene.spheres[i].z,
+		// 	scene.spheres[i].r, scene.spheres[i].m);
 		++i;
 	}
 }
