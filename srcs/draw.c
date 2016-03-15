@@ -275,6 +275,7 @@ void			draw_scene(t_scene scene)
 	// mlx_hook(window.mlx_win, KEYPRESS, KEYPRESSMASK, key_press, &window);
 	// mlx_loop_hook(window.mlx_ptr, refresh, &window);
 	// mlx_loop(window.mlx_ptr);
+	mlx_do_sync(window.mlx_ptr);
 	sleep(42);
 	mlx_destroy_window(window.mlx_ptr, window.mlx_win);
 	(void)scene;

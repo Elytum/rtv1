@@ -32,9 +32,9 @@ DRAW_FILES		=	draw.c
 CREATE_FILES	=	create.c
 DESCRIBE_FILES	=	describe.c
 
-INC		=	-I./include -I./minilibx
+INC		=	-I./include -I./minilibx_macos
 CCFLAGS	=	-Wall -Wextra -Werror -g
-LDFLAGS	=	-lmlx -L/usr/include/../lib -lXext -lX11 -lm
+LDFLAGS	=	-framework glut -framework Cocoa -framework OpenGL
 
 SRCS	=			$(addprefix srcs/, $(FILES))
 OBJS	=			$(SRCS:.c=.o)
@@ -53,27 +53,27 @@ DESCRIBE_OBJS	=	$(DESCRIBE_SRCS:.c=.o)
 all: $(NAME) draw create describe
 
 MLX:
-	make -C minilibx
+	make -C minilibx_macos
 
 $(NAME): MLX
 	create
 	describe
 	draw
 
-draw: $(OBJS) $(DRAW_OBJS)
-	$(CC) $(CCFLAGS) $(LDFLAGS) $(INC) $(OBJS) $(DRAW_OBJS) minilibx/libmlx_Linux.a -o draw -O3
+draw: MLX $(OBJS) $(DRAW_OBJS)
+	$(CC) $(CCFLAGS) $(LDFLAGS) $(INC) $(OBJS) $(DRAW_OBJS) minilibx_macos/libmlx.a -o draw -O3
 
-create: $(OBJS) $(CREATE_OBJS)
+create: MLX $(OBJS) $(CREATE_OBJS)
 	$(CC) $(CCFLAGS) $(LDFLAGS) $(INC) $(OBJS) $(CREATE_OBJS) -o create -O3
 
-describe: $(OBJS) $(DESCRIBE_OBJS)
+describe: MLX $(OBJS) $(DESCRIBE_OBJS)
 	$(CC) $(CCFLAGS) $(LDFLAGS) $(INC) $(OBJS) $(DESCRIBE_OBJS) -o describe -O3
 
 %.o: %.c
 	$(CC) $(CCFLAGS) -c  $(INC) $< -o $@
 	
 clean:
-	make clean -C minilibx
+	make clean -C minilibx_macos
 	rm -f $(OBJS)
 	rm -f $(DRAW_OBJS)
 	rm -f $(CREATE_OBJS)

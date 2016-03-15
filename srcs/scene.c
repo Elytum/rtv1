@@ -22,7 +22,7 @@ void			init_scene(int fd, t_scene *scene)
 	t_header	header;
 	// const char	error[] = "Extra data in map\n";
 
-	if (!read(fd, &header, sizeof(header)) == sizeof(header))
+	if (!(read(fd, &header, sizeof(header)) == sizeof(header)))
 		exit(0);
 	scene->materials = extract_data(fd, sizeof(t_material) * header.materials_nb);
 	scene->lights = extract_data(fd, sizeof(t_light) * header.lights_nb);
