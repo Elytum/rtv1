@@ -7,6 +7,7 @@
 # include <string.h>
 # include <fcntl.h>
 # include <stdlib.h>
+
 # define FORMAT_INTRO "Wrong format: "
 # define FORMAT_OUTRO " <OUTPUT FILE>\n"
 # define OPEN_INTRO "Couldn't open file \""

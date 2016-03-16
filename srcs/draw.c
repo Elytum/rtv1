@@ -4,6 +4,7 @@
 #include <vec3.h>
 #include <ray.h>
 #include <math.h>
+#include <forms.h>
 
 #define NAME "RTV1"
 #define WIDTH 640
@@ -22,59 +23,52 @@ typedef struct	s_window
 	int			endian;
 }				t_window;
 
-typedef enum	s_form
-{
-	PLAN = 0,
-	SPHERE,
-	CYLINDER,
-	CONE
-}				t_form;
 
-int				hit_sphere(const t_ray ray, const t_sphere sphere, float *t)
-{
-	t_vec3		dist;
-	float		b;
-	float		d;
-	float		t0;
-	float		t1;
-	int			ret;
+// int				hit_sphere(const t_ray ray, const t_sphere sphere, float *t)
+// {
+// 	t_vec3		dist;
+// 	float		b;
+// 	float		d;
+// 	float		t0;
+// 	float		t1;
+// 	int			ret;
 
-	dist = vec3_sub(sphere.center, ray.start);
-	b = vec3_dot(ray.dir, dist);
-	d = b * b - vec3_dot(dist, dist) + sphere.r * sphere.r;
-	t0 = b - sqrt(d);
-	t1 = b + sqrt(d);
-	ret = 0;
-	if (t0 > 0.1f && t0 < *t)
-	{
-		*t = t0;
-		ret = 1;
-	}
-	if (t1 > 0.1f && t1 < *t)
-	{
-		*t = t1;
-		ret = 1;
-	}
-	return (ret);
-}
+// 	dist = vec3_sub(sphere.center, ray.start);
+// 	b = vec3_dot(ray.dir, dist);
+// 	d = b * b - vec3_dot(dist, dist) + sphere.r * sphere.r;
+// 	t0 = b - sqrt(d);
+// 	t1 = b + sqrt(d);
+// 	ret = 0;
+// 	if (t0 > 0.1f && t0 < *t)
+// 	{
+// 		*t = t0;
+// 		ret = 1;
+// 	}
+// 	if (t1 > 0.1f && t1 < *t)
+// 	{
+// 		*t = t1;
+// 		ret = 1;
+// 	}
+// 	return (ret);
+// }
 
-int				find_closest(t_scene scene, const t_ray ray, int *closest, float *t)
-{
-	int			i;
+// int				find_closest(t_scene scene, const t_ray ray, int *closest, float *t)
+// {
+// 	int			i;
 
-	closest[1] = -1;
-	i = 0;
-	while (i < scene.spheres_nb)
-	{
-		if (hit_sphere(ray, scene.spheres[i], t))
-		{
-			closest[0] = SPHERE;
-			closest[1] = i;
-		}
-		++i;
-	}
-	return (closest[1] != -1);
-}
+// 	closest[1] = -1;
+// 	i = 0;
+// 	while (i < scene.spheres_nb)
+// 	{
+// 		if (hit_sphere(ray, scene.spheres[i], t))
+// 		{
+// 			closest[0] = SPHERE;
+// 			closest[1] = i;
+// 		}
+// 		++i;
+// 	}
+// 	return (closest[1] != -1);
+// }
 
 int				find_normal(const t_ray viewray, const float t,
 							t_vec3 *new_start, t_vec3 *n, t_vec3 center)
@@ -116,12 +110,8 @@ int				get_color(t_scene scene, int x, int y)
 	once = 1;
 	viewray.start = vec3_new(x - scene.camera_x, y - scene.camera_y, -10000.0f - scene.camera_z);
 	viewray.dir = vec3_new(0.0f, 0.0f, 1.0f);
-	while (once || (coef > 0.0f && level < 10))
+	while (once || (coef > 0.0f && level < 3))
 	{
-						// vec3_describe(viewray.start);
-						// write(1, ", ", 2);
-						// vec3_describe(viewray.dir);
-						// write(1, "\n", 1);
 		once = 0;
 		float t = 20000.0f;
 		if (!find_closest(scene, viewray, closest, &t) ||

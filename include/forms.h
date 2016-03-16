@@ -62,11 +62,21 @@ typedef struct	s_cone
 	int			m;
 }				t_cone;
 
+typedef enum	s_form
+{
+	PLAN = 0,
+	SPHERE,
+	CYLINDER,
+	CONE
+}				t_form;
+
 #define MATERIALS_INTRO "Materials:\n"
 #define LIGHTS_INTRO "Lights:\n"
 #define PLANES_INTRO "Planes:\n"
 #define SPHERES_INTRO "Spheres:\n"
 #define CYLINDERS_INTRO "Cylinders:\n"
 #define CONES_INTRO "Cones:\n"
+
+#include <sphere.h>
 
 #endif

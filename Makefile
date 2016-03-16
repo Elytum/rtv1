@@ -21,23 +21,23 @@ FILES	=	scene.c						\
 			scene/describe.c			\
 			material/describe.c			\
 			light/describe.c			\
-			plane/describe.c			\
-			sphere/describe.c			\
-			cylinder/describe.c			\
 			vec/vec3.c					\
 			ray/ray.c					\
-			cone/describe.c
+			forms/plane/describe.c		\
+			forms/sphere/describe.c		\
+			forms/sphere/hit.c			\
+			forms/cylinder/describe.c	\
+			forms/cone/describe.c
 
 DRAW_FILES		=	draw.c
 CREATE_FILES	=	create.c
 DESCRIBE_FILES	=	describe.c
 
-INC		=	-I./include -I./minilibx_macos
+INC		=	-I./include -I./minilibx_macos -I ./srcs/forms/sphere
 CCFLAGS	=	-Wall -Wextra -Werror -g
 LDFLAGS	=	-framework glut -framework Cocoa -framework OpenGL
 
 SRCS	=			$(addprefix srcs/, $(FILES))
-OBJS	=			$(SRCS:.c=.o)
 DRAW_SRCS		=	$(addprefix srcs/, $(DRAW_FILES))
 DRAW_OBJS		=	$(DRAW_SRCS:.c=.o)
 CREATE_SRCS		=	$(addprefix srcs/, $(CREATE_FILES))
@@ -45,12 +45,28 @@ CREATE_OBJS		=	$(CREATE_SRCS:.c=.o)
 DESCRIBE_SRCS	=	$(addprefix srcs/, $(DESCRIBE_FILES))
 DESCRIBE_OBJS	=	$(DESCRIBE_SRCS:.c=.o)
 
+FORMS = plane sphere cylinder cone
+
+FORM_CONTENT =	describe.c	\
+				hit.c
+
+SRCS += $(shell for form in $(FORMS) ;			\
+					do for file in $(FORM_CONTENT) ;	\
+						do echo $$form'/'$$file	;		\
+					done								\
+				done)
+
+OBJS	=			$(SRCS:.c=.o)
+
+FORMS_INC = $(shell for form in $(FORMS) ; do echo $$form'.h' ; done)
 
 #--------------Actions----------------------#
 
 .PHONY: MLX MLX_RE $(NAME) clean fclean re create describe draw
 
 all: $(NAME) draw create describe
+	echo $(FORMS_FILES)
+	echo $(FORMS_INC)
 
 MLX:
 	make -C minilibx_macos
