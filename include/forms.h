@@ -21,10 +21,12 @@ typedef struct	s_light
 
 typedef struct	s_plane
 {
-	float		x;
-	float		y;
-	float		z;
-	int			m;
+	t_vec3		normal;
+	t_vec3		coord;
+	// float		x;
+	// float		y;
+	// float		z;
+	// int			m;
 }				t_plane;
 
 typedef struct	s_sphere

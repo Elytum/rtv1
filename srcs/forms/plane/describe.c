@@ -8,7 +8,8 @@ void	describe_planes(t_scene scene)
 	i = 0;
 	while (i < scene.planes_nb)
 	{
-		printf("\t(%f, %f, %f)\n", scene.planes[i].x, scene.planes[i].y, scene.planes[i].z);
+		printf("\t(%f, %f, %f) (%f, %f, %f)\n", scene.planes[i].normal.x, scene.planes[i].normal.y, scene.planes[i].normal.z,
+									scene.planes[i].coord.x, scene.planes[i].coord.y, scene.planes[i].coord.z);
 		++i;
 	}
 }

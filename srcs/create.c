@@ -21,7 +21,7 @@ void	create_header(int fd)
 	h.camera_z = 2.1;
 	h.materials_nb = 3;
 	h.lights_nb = 2;
-	h.planes_nb = 0;
+	h.planes_nb = 1;
 	h.spheres_nb = 3;
 	h.cylinders_nb = 0;
 	h.cones_nb = 0;
@@ -70,16 +70,12 @@ void	create_planes(int fd)
 {
 	t_plane	s;
 
-	s.x = 1.2;
-	s.y = 2.3;
-	s.z = 3.4;
-	s.m = 0;
-	add_element(fd, &s, sizeof(s));
-	s.y = 5.5;
-	s.m = 1;
-	add_element(fd, &s, sizeof(s));
-	s.x = 6.5;
-	s.m = 2;
+	s.normal.x = 233.0;
+	s.normal.y = 290.0;
+	s.normal.z = 0.0;
+	s.coord.x = 233.0;
+	s.coord.y = 290.0;
+	s.coord.z = 0.0;
 	add_element(fd, &s, sizeof(s));
 }
 
@@ -147,7 +143,7 @@ void	create_sceen(int fd)
 	create_header(fd);
 	create_materials(fd);
 	create_lights(fd);
-	// create_planes(fd);
+	create_planes(fd);
 	create_spheres(fd);
 	// create_cylinders(fd);
 	// create_cones(fd);
