@@ -91,16 +91,16 @@ int				rgb_color(int r, int g, int b)
 
 int				get_color(t_scene scene, int x, int y)
 {
-	t_ray		viewray;
-	int			closest[2];
-	t_vec3		new_start;
-	t_vec3		n;
-	t_material	material;
-	int			i;
-	float		color[3];
-	float		coef;
-	int			level;
-	char		once;
+	t_ray			viewray;
+	int				closest[2];
+	t_vec3			new_start;
+	t_vec3			n;
+	t_material		material;
+	unsigned int	i;
+	float			color[3];
+	float			coef;
+	int				level;
+	char			once;
 
 	color[0] = 0;
 	color[1] = 0;
@@ -143,7 +143,7 @@ int				get_color(t_scene scene, int x, int y)
 			// HANDLE SHADOWS
 			char	inShadow = 0;
 
-			int c;
+			unsigned int c;
 			c = 0;
 			while (c < scene.spheres_nb)
 			{

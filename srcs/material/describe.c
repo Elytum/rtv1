@@ -2,7 +2,7 @@
 
 void	describe_materials(t_scene scene)
 {
-	int	i;
+	unsigned int	i;
 
 	write(1, MATERIALS_INTRO, sizeof(MATERIALS_INTRO) - 1);
 	i = 0;

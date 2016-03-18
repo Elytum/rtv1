@@ -2,7 +2,7 @@
 
 void	describe_planes(t_scene scene)
 {
-	int	i;
+	unsigned int	i;
 
 	write(1, PLANES_INTRO, sizeof(PLANES_INTRO) - 1);
 	i = 0;

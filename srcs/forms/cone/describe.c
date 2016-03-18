@@ -2,7 +2,7 @@
 
 void	describe_cones(t_scene scene)
 {
-	int	i;
+	unsigned int	i;
 
 	write(1, CONES_INTRO, sizeof(PLANES_INTRO) - 1);
 	i = 0;

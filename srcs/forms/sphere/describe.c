@@ -2,7 +2,7 @@
 
 void	describe_spheres(t_scene scene)
 {
-	int	i;
+	unsigned int	i;
 
 	write(1, SPHERES_INTRO, sizeof(SPHERES_INTRO) - 1);
 	i = 0;

@@ -33,21 +33,18 @@ int				hit_cone(const t_ray ray, const t_cone cone, float *t)
 	// return (ret);
 }
 
-int				find_closest_cone(t_scene scene, const t_ray ray, int *closest, float *t)
+void			find_closest_cone(t_scene scene, const t_ray ray, int *closest, float *t)
 {
-	return (0);
-	int			i;
+	unsigned int			i;
 
-	closest[1] = -1;
 	i = 0;
-	while (i < scene.spheres_nb)
+	while (i < scene.cones_nb)
 	{
-		if (hit_sphere(ray, scene.spheres[i], t))
+		if (hit_cone(ray, scene.cones[i], t))
 		{
-			closest[0] = SPHERE;
+			closest[0] = CONE;
 			closest[1] = i;
 		}
 		++i;
 	}
-	return (closest[1] != -1);
 }

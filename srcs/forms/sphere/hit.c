@@ -29,11 +29,10 @@ int				hit_sphere(const t_ray ray, const t_sphere sphere, float *t)
 	return (ret);
 }
 
-int				find_closest_sphere(t_scene scene, const t_ray ray, int *closest, float *t)
+void			find_closest_sphere(t_scene scene, const t_ray ray, int *closest, float *t)
 {
-	int			i;
+	unsigned int			i;
 
-	closest[1] = -1;
 	i = 0;
 	while (i < scene.spheres_nb)
 	{
@@ -44,5 +43,4 @@ int				find_closest_sphere(t_scene scene, const t_ray ray, int *closest, float *
 		}
 		++i;
 	}
-	return (closest[1] != -1);
 }

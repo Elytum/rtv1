@@ -2,7 +2,7 @@
 
 void	describe_cylinders(t_scene scene)
 {
-	int	i;
+	unsigned int	i;
 
 	write(1, CYLINDERS_INTRO, sizeof(CYLINDERS_INTRO) - 1);
 	i = 0;

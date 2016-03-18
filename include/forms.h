@@ -64,7 +64,7 @@ typedef struct	s_cone
 
 typedef enum	s_form
 {
-	PLAN = 0,
+	PLANE = 0,
 	SPHERE,
 	CYLINDER,
 	CONE

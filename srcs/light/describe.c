@@ -2,7 +2,7 @@
 
 void	describe_lights(t_scene scene)
 {
-	int	i;
+	unsigned int	i;
 
 	write(1, LIGHTS_INTRO, sizeof(LIGHTS_INTRO) - 1);
 	i = 0;
