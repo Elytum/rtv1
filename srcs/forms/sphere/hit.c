@@ -29,7 +29,7 @@ int				hit_sphere(const t_ray ray, const t_sphere sphere, float *t)
 	return (ret);
 }
 
-int				find_closest(t_scene scene, const t_ray ray, int *closest, float *t)
+int				find_closest_sphere(t_scene scene, const t_ray ray, int *closest, float *t)
 {
 	int			i;
 

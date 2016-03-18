@@ -23,17 +23,13 @@ FILES	=	scene.c						\
 			light/describe.c			\
 			vec/vec3.c					\
 			ray/ray.c					\
-			forms/plane/describe.c		\
-			forms/sphere/describe.c		\
-			forms/sphere/hit.c			\
-			forms/cylinder/describe.c	\
-			forms/cone/describe.c
+			forms/hit.c
 
 DRAW_FILES		=	draw.c
 CREATE_FILES	=	create.c
 DESCRIBE_FILES	=	describe.c
 
-INC		=	-I./include -I./minilibx_macos -I ./srcs/forms/sphere
+INC		=	-I./include -I./minilibx_macos
 CCFLAGS	=	-Wall -Wextra -Werror -g
 LDFLAGS	=	-framework glut -framework Cocoa -framework OpenGL
 
@@ -52,13 +48,13 @@ FORM_CONTENT =	describe.c	\
 
 SRCS += $(shell for form in $(FORMS) ;			\
 					do for file in $(FORM_CONTENT) ;	\
-						do echo $$form'/'$$file	;		\
+						do echo 'srcs/forms/'$$form'/'$$file	;		\
 					done								\
 				done)
 
 OBJS	=			$(SRCS:.c=.o)
 
-FORMS_INC = $(shell for form in $(FORMS) ; do echo $$form'.h' ; done)
+INC += $(shell for form in $(FORMS) ; do echo '-I srcs/forms/'$$form ; done)
 
 #--------------Actions----------------------#
 
