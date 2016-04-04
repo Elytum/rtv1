@@ -22,6 +22,7 @@ typedef struct		s_header
 	float			camera_x;
 	float			camera_y;
 	float			camera_z;
+	t_vec3			view;
 	unsigned int	materials_nb;
 	unsigned int	lights_nb;
 	unsigned int	planes_nb;
@@ -35,6 +36,7 @@ typedef struct		s_scene
 	float			camera_x;
 	float			camera_y;
 	float			camera_z;
+	t_vec3			view;
 	t_material		*materials;
 	t_light			*lights;
 	t_plane			*planes;

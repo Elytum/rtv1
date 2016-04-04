@@ -18,5 +18,8 @@ t_vec3			vec3_cross(const t_vec3 vec1, const t_vec3 vec2);
 double			vec3_len(const t_vec3 vec);
 t_vec3			vec3_norm(const t_vec3 vec);
 void			vec3_describe(const t_vec3 vec);
+t_vec3			vec3_rotx(const t_vec3 vec, const double r);
+t_vec3			vec3_roty(const t_vec3 vec, const double r);
+t_vec3			vec3_rotz(const t_vec3 vec, const double r);
 
 #endif

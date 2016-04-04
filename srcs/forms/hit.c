@@ -22,7 +22,10 @@ int				find_closest(t_data *data, const int get_normal)
 	}
 	else
 	{
-		return (0);
+		return (hit_any_sphere(data, data->lightray, data->t) ||
+			hit_any_plane(data, data->lightray, data->t) ||
+			hit_any_cone(data, data->lightray, data->t) ||
+			hit_any_cylinder(data, data->lightray, data->t));
 		// ret = hit_any_plane(data, data->viewray, 0);
 		// if (ret != 1)
 		// 	printf("Ret: %i\n", ret);

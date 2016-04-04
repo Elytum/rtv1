@@ -33,6 +33,7 @@ void			init_scene(int fd, t_scene *scene)
 	scene->camera_x = header.camera_x;
 	scene->camera_y = header.camera_y;
 	scene->camera_z = header.camera_z;
+	scene->view = header.view;
 	scene->materials_nb = header.materials_nb;
 	scene->lights_nb = header.lights_nb;
 	scene->planes_nb = header.planes_nb;

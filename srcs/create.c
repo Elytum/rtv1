@@ -17,10 +17,11 @@ void	create_header(int fd)
 	t_header	h;
 
 	h.camera_x = 0.0;
-	h.camera_y = 1.0;
-	h.camera_z = -5000.0;
+	h.camera_y = 1500.0;
+	h.camera_z = -1000.0;
+	h.view = vec3_norm(vec3_new(0, 0, 1));
 	h.materials_nb = 3;
-	h.lights_nb = 2;//2;
+	h.lights_nb = 1;//2;
 	h.planes_nb = 1;
 	h.spheres_nb = 1;//3;//4;
 	h.cylinders_nb = 0;
@@ -57,18 +58,18 @@ void	create_lights(int fd)
 	// l.pos.x = 0.0;
 	// l.pos.y = -100.0;
 	// l.pos.z = -100.0;
-	l.pos.x = 500.0;
-	l.pos.y = -1000.0;
-	l.pos.z = -500.0;
+	l.pos.x = 0.0;
+	l.pos.y = 1000.0;
+	l.pos.z = 100.0;
 	l.r = 1.0;
 	l.g = 1.0;
 	l.b = 1.0;
 	add_element(fd, &l, sizeof(l));
-	l.pos.x = 0.0;
-	l.r = 0.6;
-	l.g = 0.7;
-	l.b = 1.0;
-	add_element(fd, &l, sizeof(l));
+	// l.pos.x = 0.0;
+	// l.r = 0.6;
+	// l.g = 0.7;
+	// l.b = 1.0;
+	// add_element(fd, &l, sizeof(l));
 }
 
 void	create_planes(int fd)
@@ -92,8 +93,8 @@ void	create_spheres(int fd)
 
 	s.m = 0;
 	s.center.x = 0.0;
-	s.center.y = -1000.0;
-	s.center.z = 4000.0;
+	s.center.y = 1000.0;
+	s.center.z = 750.0;
 	s.r = 500;
 	add_element(fd, &s, sizeof(s));
 	// s.center.x = 407.0;

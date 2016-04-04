@@ -45,7 +45,7 @@ int				rgb_color(int r, int g, int b)
 
 void			init_data(t_data *data, int x, int y)
 {
-	const t_vec3	target = vec3_norm(vec3_new(x - WIDTH / 2, y - HEIGHT / 2, - (WIDTH / 2 * tan(30 / 2))));
+	t_vec3		target = vec3_norm(vec3_new(x - WIDTH / 2, y - HEIGHT / 2, - (WIDTH / 2 * tan(30 / 2))));
 	// const t_vec3	pos = vec3_new(data->scene.camera_x, data->scene.camera_y, data->scene.camera_z);
 
 	data->color[0] = 0;
@@ -57,7 +57,10 @@ void			init_data(t_data *data, int x, int y)
 	data->viewray.start = vec3_new(data->scene.camera_x, data->scene.camera_y, data->scene.camera_z);
 	// data->viewray.dir = vec3_new(0.0f, 0.0f, 1.0f);
 	// data->viewray.dir = vec3_norm(vec3_sub(target, pos));
-	data->viewray.dir = target;
+	target = vec3_rotx(target, data->scene.view.x);
+	target = vec3_roty(target, data->scene.view.y);
+	target = vec3_rotz(target, data->scene.view.z);
+	data->viewray.dir = vec3_norm(target);//vec3_norm(vec3_new(fmod(target.x + data->scene.view.x, 3.14), fmod(target.y + data->scene.view.y, 3.14), target.z));
 }
 
 int				get_color(t_data *data, int x, int y)
@@ -67,7 +70,7 @@ int				get_color(t_data *data, int x, int y)
 	// Init data structure
 	init_data(data, x, y);
 	// As long as the ray can resbound
-	while (data->once || (data->coef > 0.0f && data->level < 1))
+	while (data->once || (data->coef > 0.0f && data->level < 3))
 	{
 		// We rememver we at least resbounded once
 		data->once = 0;
@@ -202,6 +205,16 @@ void			raytrace(t_data *data, t_window window)
 	}
 }
 
+void			loop(t_data *data, t_window window)
+{
+	while (42)
+	{
+		raytrace(data, window);
+		mlx_do_sync(window.mlx_ptr);
+		data->scene.view.x += .05;
+	}
+}
+
 void			draw_scene(t_data *data)
 {
 	t_window	window;
@@ -213,11 +226,12 @@ void			draw_scene(t_data *data)
 	window.img = mlx_new_image(window.mlx_ptr, WIDTH, HEIGHT);
 	window.data = mlx_get_data_addr(window.img, &(window.bpp),
 		&(window.line_size), &(window.endian));
-	raytrace(data, window);
+	loop(data, window);
+			// raytrace(data, window);
 	// mlx_hook(window.mlx_win, KEYPRESS, KEYPRESSMASK, key_press, &window);
 	// mlx_loop_hook(window.mlx_ptr, refresh, &window);
 	// mlx_loop(window.mlx_ptr);
-	mlx_do_sync(window.mlx_ptr);
+			// mlx_do_sync(window.mlx_ptr);
 	// sleep(42);
 	while (42);
 	mlx_destroy_window(window.mlx_ptr, window.mlx_win);
