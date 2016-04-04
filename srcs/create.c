@@ -21,11 +21,11 @@ void	create_header(int fd)
 	h.camera_z = -1000.0;
 	h.view = vec3_norm(vec3_new(0, 0, 1));
 	h.materials_nb = 3;
-	h.lights_nb = 1;//2;
+	h.lights_nb = 2;//2;
 	h.planes_nb = 1;
-	h.spheres_nb = 1;//3;//4;
-	h.cylinders_nb = 0;
-	h.cones_nb = 0;
+	h.spheres_nb = 3;//3;//4;
+	h.cylinders_nb = 1;
+	h.cones_nb = 1;
 	write(fd, &h, sizeof(h));
 }
 
@@ -65,11 +65,11 @@ void	create_lights(int fd)
 	l.g = 1.0;
 	l.b = 1.0;
 	add_element(fd, &l, sizeof(l));
-	// l.pos.x = 0.0;
-	// l.r = 0.6;
-	// l.g = 0.7;
-	// l.b = 1.0;
-	// add_element(fd, &l, sizeof(l));
+	l.pos.z = -1000.0;
+	l.r = 0.6;
+	l.g = 0.7;
+	l.b = 1.0;
+	add_element(fd, &l, sizeof(l));
 }
 
 void	create_planes(int fd)
@@ -97,14 +97,12 @@ void	create_spheres(int fd)
 	s.center.z = 750.0;
 	s.r = 500;
 	add_element(fd, &s, sizeof(s));
-	// s.center.x = 407.0;
-	// s.center.x = 50.0;
-	// s.m = 1;
-	// add_element(fd, &s, sizeof(s));
-	// s.center.x = 0.0;
-	// s.center.y = -25.0;
-	// s.m = 2;
-	// add_element(fd, &s, sizeof(s));
+	s.center.x = -1200.0;
+	s.m = 1;
+	add_element(fd, &s, sizeof(s));
+	s.center.x = 1200.0;
+	s.m = 2;
+	add_element(fd, &s, sizeof(s));
 	// s.center.x = 320.0;
 	// s.center.y = 215.0;
 	// s.center.z = 50.0;
@@ -116,19 +114,20 @@ void	create_cylinders(int fd)
 {
 	t_cylinder	s;
 
-	s.x1 = 1.2;
-	s.y1 = 2.3;
-	s.z1 = 3.4;
-	s.x2 = 4.5;
-	s.y2 = 5.6;
-	s.z2 = 6.7;
+	s.origin.x = 0;
+	s.origin.y = 0;
+	s.origin.z = 0;
+	s.dir.x = 1;
+	s.dir.y = .5;
+	s.dir.z = .1;
+	s.dir = vec3_norm(s.dir);
 	s.r = 7.8;
 	s.m = 0;
 	add_element(fd, &s, sizeof(s));
-	s.r = 5.5;
-	add_element(fd, &s, sizeof(s));
-	s.r = 6.5;
-	add_element(fd, &s, sizeof(s));
+	// s.r = 5.5;
+	// add_element(fd, &s, sizeof(s));
+	// s.r = 6.5;
+	// add_element(fd, &s, sizeof(s));
 }
 
 void	create_cones(int fd)
@@ -145,10 +144,10 @@ void	create_cones(int fd)
 	s.r2 = 8.9;
 	s.m = 0;
 	add_element(fd, &s, sizeof(s));
-	s.r1 = 5.5;
-	add_element(fd, &s, sizeof(s));
-	s.r2 = 6.5;
-	add_element(fd, &s, sizeof(s));
+	// s.r1 = 5.5;
+	// add_element(fd, &s, sizeof(s));
+	// s.r2 = 6.5;
+	// add_element(fd, &s, sizeof(s));
 }
 
 void	create_sceen(int fd)
@@ -158,8 +157,8 @@ void	create_sceen(int fd)
 	create_lights(fd);
 	create_planes(fd);
 	create_spheres(fd);
-	// create_cylinders(fd);
-	// create_cones(fd);
+	create_cylinders(fd);
+	create_cones(fd);
 }
 
 int		main(int ac, char **av)

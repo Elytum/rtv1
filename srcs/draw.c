@@ -57,9 +57,9 @@ void			init_data(t_data *data, int x, int y)
 	data->viewray.start = vec3_new(data->scene.camera_x, data->scene.camera_y, data->scene.camera_z);
 	// data->viewray.dir = vec3_new(0.0f, 0.0f, 1.0f);
 	// data->viewray.dir = vec3_norm(vec3_sub(target, pos));
-	target = vec3_rotx(target, data->scene.view.x);
-	target = vec3_roty(target, data->scene.view.y);
-	target = vec3_rotz(target, data->scene.view.z);
+	// target = vec3_rotx(target, data->scene.view.x);
+	// target = vec3_roty(target, data->scene.view.y);
+	// target = vec3_rotz(target, data->scene.view.z - 1);
 	data->viewray.dir = vec3_norm(target);//vec3_norm(vec3_new(fmod(target.x + data->scene.view.x, 3.14), fmod(target.y + data->scene.view.y, 3.14), target.z));
 }
 
@@ -212,6 +212,7 @@ void			loop(t_data *data, t_window window)
 		raytrace(data, window);
 		mlx_do_sync(window.mlx_ptr);
 		data->scene.view.x += .05;
+		sleep(42);
 	}
 }
 
@@ -233,7 +234,7 @@ void			draw_scene(t_data *data)
 	// mlx_loop(window.mlx_ptr);
 			// mlx_do_sync(window.mlx_ptr);
 	// sleep(42);
-	while (42);
+	// while (42);
 	mlx_destroy_window(window.mlx_ptr, window.mlx_win);
 	// (void)scene;
 }

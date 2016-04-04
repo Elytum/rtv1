@@ -23,17 +23,11 @@ typedef struct	s_plane
 {
 	t_vec3		normal;
 	t_vec3		coord;
-	// float		x;
-	// float		y;
-	// float		z;
 	int			m;
 }				t_plane;
 
 typedef struct	s_sphere
 {
-	// float		x;
-	// float		y;
-	// float		z;
 	t_vec3		center;
 	double		r;
 	int			m;
@@ -41,12 +35,8 @@ typedef struct	s_sphere
 
 typedef struct	s_cylinder
 {
-	float		x1;
-	float		y1;
-	float		z1;
-	float		x2;
-	float		y2;
-	float		z2;
+	t_vec3		origin;
+	t_vec3		dir;
 	float		r;
 	int			m;
 }				t_cylinder;
