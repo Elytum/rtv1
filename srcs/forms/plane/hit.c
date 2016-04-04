@@ -1,69 +1,67 @@
 #include <math.h>
 #include <forms.h>
 
-int				hit_plane(const t_ray ray, const t_plane plane, float *t)
+int				hit_plane(const t_ray ray, const t_plane plane, double *t)
 {
-	const	float d = vec3_dot(normal, coord);
+	const double	dv = vec3_dot(plane.normal, ray.dir);
+	double			tmp;
 
-	return (0);
-	(void)ray;
-	(void)plane;
-	(void)t;
-	// t_vec3		dist;
-	// float		b;
-	// float		d;
-	// float		t0;
-	// float		t1;
-	// int			ret;
-
-	// dist = vec3_sub(sphere.center, ray.start);
-	// b = vec3_dot(ray.dir, dist);
-	// d = b * b - vec3_dot(dist, dist) + sphere.r * sphere.r;
-	// t0 = b - sqrt(d);
-	// t1 = b + sqrt(d);
-	// ret = 0;
-	// if (t0 > 1 && t0 < *t)
+	if (dv == 0)
+		return (0);
+	tmp = (-vec3_dot(plane.normal, vec3_sub(plane.coord, ray.start))) / dv;
+	if (tmp < 0 || tmp > *t)
+		return (0);
+	// printf("\t\ttmp: %f\n", tmp);
+	// if (tmp < *t)
 	// {
-	// 	*t = t0;
-	// 	ret = 1;
+	*t = tmp;
+	return (1);
 	// }
-	// if (t1 > 1 && t1 < *t)
-	// {
-	// 	*t = t1;
-	// 	ret = 1;
-	// }
-	// return (ret);
+	// *t = tmp;
+	// return (0);
 }
 
-// bool linePlaneIntersection(Vector& contact, Vector ray, Vector rayOrigin, 
-//                            Vector normal, Vector coord) {
-//     // get d value
-//     float d = Dot(normal, coord);
+int				plane_normal(t_data *data)
+{
+	const t_plane	plane = data->scene.planes[data->closest[1]];
+	const t_ray		ray = data->viewray;
 
-//     if (Dot(normal, ray) == 0) {
-//         return false; // No intersection, the line is parallel to the plane
-//     }
+	if (vec3_dot(plane.normal, ray.dir) < 0)
+		data->normal = plane.normal;
+	else
+		data->normal = vec3_reverse(plane.normal);
+	// data->material = data->scene.materials[data->scene.planes[data->closest[1]].m];
+	data->material = data->scene.materials[data->scene.planes[data->closest[1]].m];
+	data->new_start = vec3_add(data->viewray.start, vec3_mult(data->viewray.dir, data->t));
+	return (1);
+}
 
-//     // Compute the X value for the directed line ray intersecting the plane
-//     float x = (d - Dot(normal, rayOrigin)) / Dot(normal, ray);
-
-//     // output contact point
-//     *contact = rayOrigin + normalize(ray)*x; //Make sure your ray vector is normalized
-//     return true;
-// }
-
-void			find_closest_plane(t_scene scene, const t_ray ray, int *closest, float *t)
+void			find_closest_plane(t_data *data, const t_ray ray, double *t)
 {
 	unsigned int			i;
 
 	i = 0;
-	while (i < scene.planes_nb)
+	while (i < data->scene.planes_nb)
 	{
-		if (hit_plane(ray, scene.planes[i], t))
+		if (hit_plane(ray, data->scene.planes[i], t))
 		{
-			closest[0] = PLANE;
-			closest[1] = i;
+			data->closest[0] = PLANE;
+			data->closest[1] = i;
 		}
 		++i;
 	}
+}
+
+int				hit_any_plane(t_data *data, const t_ray ray, double t)
+{
+	unsigned int			i;
+
+	i = 0;
+	while (i < data->scene.planes_nb)
+	{
+		if (hit_plane(ray, data->scene.planes[i], &t))
+			return (1);
+		++i;
+	}
+	return (0);
 }

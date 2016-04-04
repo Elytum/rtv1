@@ -17,7 +17,7 @@
 # define UNKNOWN "Unknown form, stopping\n"
 # define VERBOSE 1
 
-typedef struct	s_header
+typedef struct		s_header
 {
 	float			camera_x;
 	float			camera_y;
@@ -28,9 +28,9 @@ typedef struct	s_header
 	unsigned int	spheres_nb;
 	unsigned int	cylinders_nb;
 	unsigned int	cones_nb;
-}				t_header;
+}					t_header;
 
-typedef struct	s_scene
+typedef struct		s_scene
 {
 	float			camera_x;
 	float			camera_y;
@@ -47,7 +47,23 @@ typedef struct	s_scene
 	unsigned int	spheres_nb;
 	unsigned int	cylinders_nb;
 	unsigned int	cones_nb;
-}				t_scene;
+}					t_scene;
+
+typedef struct		s_data
+{
+	t_scene			scene;
+	t_ray			viewray;
+	t_ray			lightray;
+	int				closest[2];
+	t_vec3			new_start;
+	t_vec3			normal;
+	t_material		material;
+	float			color[3];
+	double			coef;
+	int				level;
+	char			once;
+	double			t;
+}					t_data;
 
 void			init_scene(int fd, t_scene *scene);
 void			delete_scene(t_scene scene);
@@ -58,6 +74,6 @@ void			describe_spheres(t_scene scene);
 void			describe_cylinders(t_scene scene);
 void			describe_cones(t_scene scene);
 void			describe_scene(t_scene scene);
-int				find_closest(t_scene scene, const t_ray ray, int *closest, float *t);
+int				find_closest(t_data *data, const int get_normal);
 
 #endif

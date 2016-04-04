@@ -26,7 +26,7 @@ typedef struct	s_plane
 	// float		x;
 	// float		y;
 	// float		z;
-	// int			m;
+	int			m;
 }				t_plane;
 
 typedef struct	s_sphere
@@ -35,7 +35,7 @@ typedef struct	s_sphere
 	// float		y;
 	// float		z;
 	t_vec3		center;
-	float		r;
+	double		r;
 	int			m;
 }				t_sphere;
 

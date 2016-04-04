@@ -16,13 +16,13 @@ void	create_header(int fd)
 {
 	t_header	h;
 
-	h.camera_x = 0.1;
+	h.camera_x = 0.0;
 	h.camera_y = 1.0;
-	h.camera_z = 2.1;
+	h.camera_z = -5000.0;
 	h.materials_nb = 3;
-	h.lights_nb = 2;
+	h.lights_nb = 2;//2;
 	h.planes_nb = 1;
-	h.spheres_nb = 3;
+	h.spheres_nb = 1;//3;//4;
 	h.cylinders_nb = 0;
 	h.cones_nb = 0;
 	write(fd, &h, sizeof(h));
@@ -35,15 +35,18 @@ void	create_materials(int fd)
 	m.r = 1.0;
 	m.g = 1.0;
 	m.b = 0.0;
-	m.c = 0.5;
+	m.c = 1;
+	// m.c = 0.5;
 	add_element(fd, &m, sizeof(m));
 	m.r = 0.0;
 	m.b = 1.0;
-	m.c = 1.5;
+	m.c = 1;
+	// m.c = 1.5;
 	add_element(fd, &m, sizeof(m));
 	m.r = 1.0;
 	m.g = 0.0;
-	m.c = 0.0;
+	m.c = 1;
+	// m.c = 0.0;
 	add_element(fd, &m, sizeof(m));
 }
 
@@ -51,15 +54,17 @@ void	create_lights(int fd)
 {
 	t_light		l;
 
-	l.pos.x = 0.0;
-	l.pos.y = 240.0;
-	l.pos.z = -100.0;
+	// l.pos.x = 0.0;
+	// l.pos.y = -100.0;
+	// l.pos.z = -100.0;
+	l.pos.x = 500.0;
+	l.pos.y = -1000.0;
+	l.pos.z = -500.0;
 	l.r = 1.0;
 	l.g = 1.0;
 	l.b = 1.0;
 	add_element(fd, &l, sizeof(l));
-	l.pos.x = 640.0;
-	l.pos.z = -10000.0;
+	l.pos.x = 0.0;
 	l.r = 0.6;
 	l.g = 0.7;
 	l.b = 1.0;
@@ -70,12 +75,14 @@ void	create_planes(int fd)
 {
 	t_plane	s;
 
-	s.normal.x = 233.0;
-	s.normal.y = 290.0;
-	s.normal.z = 0.0;
-	s.coord.x = 233.0;
-	s.coord.y = 290.0;
-	s.coord.z = 0.0;
+	s.m = 1;
+	s.normal.x = 0.0;
+	s.normal.y = 1.1;
+	s.normal.z = 0.1;
+	s.normal = vec3_norm(s.normal);
+	s.coord.x = 0.0;
+	s.coord.y = 0.0;
+	s.coord.z = -10000.0;
 	add_element(fd, &s, sizeof(s));
 }
 
@@ -83,20 +90,25 @@ void	create_spheres(int fd)
 {
 	t_sphere	s;
 
-	s.center.x = 233.0;
-	s.center.y = 290.0;
-	s.center.z = 0.0;
-	s.r = 100;
 	s.m = 0;
+	s.center.x = 0.0;
+	s.center.y = -1000.0;
+	s.center.z = 4000.0;
+	s.r = 500;
 	add_element(fd, &s, sizeof(s));
-	s.center.x = 407.0;
-	s.center.y = 290.0;
-	s.m = 1;
-	add_element(fd, &s, sizeof(s));
-	s.center.x = 320.0;
-	s.center.y = 140.0;
-	s.m = 2;
-	add_element(fd, &s, sizeof(s));
+	// s.center.x = 407.0;
+	// s.center.x = 50.0;
+	// s.m = 1;
+	// add_element(fd, &s, sizeof(s));
+	// s.center.x = 0.0;
+	// s.center.y = -25.0;
+	// s.m = 2;
+	// add_element(fd, &s, sizeof(s));
+	// s.center.x = 320.0;
+	// s.center.y = 215.0;
+	// s.center.z = 50.0;
+	// s.r = 100;
+	// add_element(fd, &s, sizeof(s));
 }
 
 void	create_cylinders(int fd)

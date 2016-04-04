@@ -5,6 +5,7 @@
 #include <ray.h>
 #include <math.h>
 #include <forms.h>
+#include <float.h>
 
 #define NAME "RTV1"
 #define WIDTH 640
@@ -22,53 +23,6 @@ typedef struct	s_window
 	int			line_size;
 	int			endian;
 }				t_window;
-
-
-// int				hit_sphere(const t_ray ray, const t_sphere sphere, float *t)
-// {
-// 	t_vec3		dist;
-// 	float		b;
-// 	float		d;
-// 	float		t0;
-// 	float		t1;
-// 	int			ret;
-
-// 	dist = vec3_sub(sphere.center, ray.start);
-// 	b = vec3_dot(ray.dir, dist);
-// 	d = b * b - vec3_dot(dist, dist) + sphere.r * sphere.r;
-// 	t0 = b - sqrt(d);
-// 	t1 = b + sqrt(d);
-// 	ret = 0;
-// 	if (t0 > 0.1f && t0 < *t)
-// 	{
-// 		*t = t0;
-// 		ret = 1;
-// 	}
-// 	if (t1 > 0.1f && t1 < *t)
-// 	{
-// 		*t = t1;
-// 		ret = 1;
-// 	}
-// 	return (ret);
-// }
-
-// int				find_closest(t_scene scene, const t_ray ray, int *closest, float *t)
-// {
-// 	int			i;
-
-// 	closest[1] = -1;
-// 	i = 0;
-// 	while (i < scene.spheres_nb)
-// 	{
-// 		if (hit_sphere(ray, scene.spheres[i], t))
-// 		{
-// 			closest[0] = SPHERE;
-// 			closest[1] = i;
-// 		}
-// 		++i;
-// 	}
-// 	return (closest[1] != -1);
-// }
 
 int				find_normal(const t_ray viewray, const float t,
 							t_vec3 *new_start, t_vec3 *n, t_vec3 center)
@@ -89,87 +43,90 @@ int				rgb_color(int r, int g, int b)
 	return ((r << 16) + (g << 8) + b);
 }
 
-int				get_color(t_scene scene, int x, int y)
+void			init_data(t_data *data, int x, int y)
 {
-	t_ray			viewray;
-	int				closest[2];
-	t_vec3			new_start;
-	t_vec3			n;
-	t_material		material;
+	const t_vec3	target = vec3_norm(vec3_new(x - WIDTH / 2, y - HEIGHT / 2, - (WIDTH / 2 * tan(30 / 2))));
+	// const t_vec3	pos = vec3_new(data->scene.camera_x, data->scene.camera_y, data->scene.camera_z);
+
+	data->color[0] = 0;
+	data->color[1] = 0;
+	data->color[2] = 0;
+	data->coef = 1.0f;
+	data->level = 0;
+	data->once = 1;
+	data->viewray.start = vec3_new(data->scene.camera_x, data->scene.camera_y, data->scene.camera_z);
+	// data->viewray.dir = vec3_new(0.0f, 0.0f, 1.0f);
+	// data->viewray.dir = vec3_norm(vec3_sub(target, pos));
+	data->viewray.dir = target;
+}
+
+int				get_color(t_data *data, int x, int y)
+{
 	unsigned int	i;
-	float			color[3];
-	float			coef;
-	int				level;
-	char			once;
 
-	color[0] = 0;
-	color[1] = 0;
-	color[2] = 0;
-	coef = 1.0f;
-	level = 0;
-	once = 1;
-	viewray.start = vec3_new(x - scene.camera_x, y - scene.camera_y, -10000.0f - scene.camera_z);
-	viewray.dir = vec3_new(0.0f, 0.0f, 1.0f);
-	while (once || (coef > 0.0f && level < 3))
+	// Init data structure
+	init_data(data, x, y);
+	// As long as the ray can resbound
+	while (data->once || (data->coef > 0.0f && data->level < 1))
 	{
-		once = 0;
-		float t = 20000.0f;
-		if (!find_closest(scene, viewray, closest, &t) ||
-			!find_normal(viewray, t, &new_start, &n, scene.spheres[closest[1]].center))
+		// We rememver we at least resbounded once
+		data->once = 0;
+		// We set the farest distance to 20000
+		data->t = DBL_MAX;
+		// If there is nothine closer, stop
+		if (!find_closest(data, 1))
 			break ;
-		material = scene.materials[scene.spheres[closest[1]].m];
+
+// data->color[0] += data->material.r;
+// data->color[1] += data->material.g;
+// data->color[2] += data->material.b;
+
+		// Else, handle it's color
 		i = 0;
-		// HANDLE LIGHTS
-		while (i < scene.lights_nb)
+		// For every lights in the scene
+		while (i < data->scene.lights_nb)
 		{
-			t_light		current = scene.lights[i];
-			t_vec3		dist = vec3_sub(current.pos, new_start);
+			t_light		current = data->scene.lights[i];
+			t_vec3		dist = vec3_sub(current.pos, data->new_start);
 
-			if (vec3_dot(n, dist) <= 0.0f)
+			// If the light is perpendicular to the pixel, ignore it
+			if (vec3_dot(data->normal, dist) <= 0.0f)
 			{
 				++i;
 				continue ;
 			}
-			t = sqrt(vec3_dot(dist, dist));
-			if (t <= 0.0f)
+			data->t = sqrt(vec3_dot(dist, dist));
+			// Or if the light is on the other side of the pixel, ignore it
+			if (data->t <= 0.0f)
 			{
 				++i;
 				continue ;
 			}
-			t_ray	light_ray;
-
-			light_ray.start = new_start;
-			light_ray.dir = vec3_mult(dist, 1 / t);
-			// HANDLE SHADOWS
-			char	inShadow = 0;
-
-			unsigned int c;
-			c = 0;
-			while (c < scene.spheres_nb)
+			// if (data->closest[1] == PLANE)
+			// 	printf("First\n");
+			// Else, create a new ray
+			data->lightray.start = data->new_start;
+			data->lightray.dir = vec3_mult(dist, 1 / data->t);
+			// And if that ray doesn't cross anything between the actual point and the light's position
+			if (!find_closest(data, 0))
 			{
-				if (hit_sphere(light_ray, scene.spheres[c], &t))
-				{
-					inShadow = 1;
-					break;
-				}
-				++c;
-			}
-			if (!inShadow)
-			{
-				float lambert = vec3_dot(light_ray.dir, n) * coef;
-				color[0] += lambert * current.r * material.r;
-				color[1] += lambert * current.g * material.g;
-				color[2] += lambert * current.b * material.b;
+				// if (data->closest[1] == PLANE)
+				// 	printf("Second\n");
+				// Add it's color
+				float lambert = vec3_dot(data->lightray.dir, data->normal) * data->coef;
+				data->color[0] += lambert * current.r * data->material.r;
+				data->color[1] += lambert * current.g * data->material.g;
+				data->color[2] += lambert * current.b * data->material.b;
 			}
 			++i;
 		}
-		coef *= material.c;
-		float reflet = 2.0f * vec3_dot(viewray.dir, n);
-		viewray.start = new_start;
-		viewray.dir = vec3_sub(viewray.dir, vec3_mult(n, reflet));
-		++level;
+		data->coef *= data->material.c;
+		float reflet = 2.0f * vec3_dot(data->viewray.dir, data->normal);
+		data->viewray.start = data->new_start;
+		data->viewray.dir = vec3_sub(data->viewray.dir, vec3_mult(data->normal, reflet));
+		++data->level;
 	}
-	return (rgb_color(MIN(color[0] * 255.0f, 255.0f), MIN(color[1] * 255.0f, 255.0f), MIN(color[2] * 255.0f, 255)));
+	return (rgb_color(MIN(data->color[0] * 255.0f, 255.0f), MIN(data->color[1] * 255.0f, 255.0f), MIN(data->color[2] * 255.0f, 255)));
 }
 
 #define MAX_SQUARE 1
@@ -204,7 +161,7 @@ int				do_draw_square(int x, int y, int size)
 	return (0);
 }
 
-void			raytrace_huge(t_scene scene, t_window window, int size)
+void			raytrace_huge(t_data *data, t_window window, int size)
 {
 	int			x;
 	int			y;
@@ -221,7 +178,7 @@ void			raytrace_huge(t_scene scene, t_window window, int size)
 		{
 			if (do_draw_square(x, y, size))
 			{
-				color = get_color(scene, x, y);
+				color = get_color(data, x, y);
 				draw_square(window, ptr, size, color);
 			}
 			x += size;
@@ -233,24 +190,19 @@ void			raytrace_huge(t_scene scene, t_window window, int size)
 	mlx_put_image_to_window(window.mlx_ptr, window.mlx_win, window.img, 0, 0);
 }
 
-void			raytrace(t_scene scene, t_window window)
+void			raytrace(t_data *data, t_window window)
 {
-	// while (1)
-	// {
-		int		size;
+	int		size;
 
-		size = MAX_SQUARE;
-		while (size)
-		{
-			raytrace_huge(scene, window, size);
-			size /= 2;
-		}
-		// scene.camera_x += 10;
-	// 	scene.camera_y += 5;
-	// }
+	size = MAX_SQUARE;
+	while (size)
+	{
+		raytrace_huge(data, window, size);
+		size /= 2;
+	}
 }
 
-void			draw_scene(t_scene scene)
+void			draw_scene(t_data *data)
 {
 	t_window	window;
 
@@ -261,21 +213,24 @@ void			draw_scene(t_scene scene)
 	window.img = mlx_new_image(window.mlx_ptr, WIDTH, HEIGHT);
 	window.data = mlx_get_data_addr(window.img, &(window.bpp),
 		&(window.line_size), &(window.endian));
-	raytrace(scene, window);
+	raytrace(data, window);
 	// mlx_hook(window.mlx_win, KEYPRESS, KEYPRESSMASK, key_press, &window);
 	// mlx_loop_hook(window.mlx_ptr, refresh, &window);
 	// mlx_loop(window.mlx_ptr);
 	mlx_do_sync(window.mlx_ptr);
-	sleep(42);
+	// sleep(42);
+	while (42);
 	mlx_destroy_window(window.mlx_ptr, window.mlx_win);
-	(void)scene;
+	// (void)scene;
 }
 
 int		main(int ac, char **av)
 {
-	t_scene		scene;
+	t_data		*data;
 	int			fd;
 
+	if (!(data = (t_data *)malloc(sizeof(t_data))))
+		return (0);
 	if (ac != 2)
 	{
 		write(2, FORMAT_INTRO, sizeof(FORMAT_INTRO) - 1);
@@ -290,11 +245,12 @@ int		main(int ac, char **av)
 		write(2, OPEN_OUTRO, sizeof(OPEN_OUTRO) - 1);
 		return (1);
 	}
-	init_scene(fd, &scene);
+	init_scene(fd, &(data->scene));
 	close(fd);
 	if (VERBOSE)
-		describe_scene(scene);
-	draw_scene(scene);
-	delete_scene(scene);
+		describe_scene(data->scene);
+	draw_scene(data);
+	delete_scene(data->scene);
+	free(data);
 	return (0);
 }

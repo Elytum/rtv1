@@ -1,7 +1,7 @@
 #include <math.h>
 #include <forms.h>
 
-int				hit_cone(const t_ray ray, const t_cone cone, float *t)
+int				hit_cone(const t_ray ray, const t_cone cone, double *t)
 {
 	return (0);
 	(void)ray;
@@ -33,18 +33,32 @@ int				hit_cone(const t_ray ray, const t_cone cone, float *t)
 	// return (ret);
 }
 
-void			find_closest_cone(t_scene scene, const t_ray ray, int *closest, float *t)
+void			find_closest_cone(t_data *data, const t_ray ray, double *t)
 {
 	unsigned int			i;
 
 	i = 0;
-	while (i < scene.cones_nb)
+	while (i < data->scene.cones_nb)
 	{
-		if (hit_cone(ray, scene.cones[i], t))
+		if (hit_cone(ray, data->scene.cones[i], t))
 		{
-			closest[0] = CONE;
-			closest[1] = i;
+			data->closest[0] = CONE;
+			data->closest[1] = i;
 		}
 		++i;
 	}
+}
+
+int				hit_any_cone(t_data *data, const t_ray ray, double t)
+{
+	unsigned int			i;
+
+	i = 0;
+	while (i < data->scene.cones_nb)
+	{
+		if (hit_cone(ray, data->scene.cones[i], &t))
+			return (1);
+		++i;
+	}
+	return (0);
 }

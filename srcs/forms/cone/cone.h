@@ -4,9 +4,10 @@
 #include <raytracer.h>
 #include <ray.h>
 
-typedef struct	s_scene t_scene;
+typedef struct	s_data t_data;
 
-int				hit_cone(const t_ray ray, const t_cone cone, float *t);
-void			find_closest_cone(t_scene scene, const t_ray ray, int *closest, float *t);
+int				hit_cone(const t_ray ray, const t_cone cone, double *t);
+void			find_closest_cone(t_data *data, const t_ray ray, double *t);
+int				hit_any_cone(t_data *data, const t_ray ray, double t);
 
 #endif

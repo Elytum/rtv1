@@ -1,7 +1,7 @@
 #include <math.h>
 #include <forms.h>
 
-int				hit_cylinder(const t_ray ray, const t_cylinder cylinder, float *t)
+int				hit_cylinder(const t_ray ray, const t_cylinder cylinder, double *t)
 {
 	return (0);
 	(void)ray;
@@ -33,18 +33,32 @@ int				hit_cylinder(const t_ray ray, const t_cylinder cylinder, float *t)
 	// return (ret);
 }
 
-void			find_closest_cylinder(t_scene scene, const t_ray ray, int *closest, float *t)
+void			find_closest_cylinder(t_data *data, const t_ray ray, double *t)
 {
 	unsigned int			i;
 
 	i = 0;
-	while (i < scene.cylinders_nb)
+	while (i < data->scene.cylinders_nb)
 	{
-		if (hit_cylinder(ray, scene.cylinders[i], t))
+		if (hit_cylinder(ray, data->scene.cylinders[i], t))
 		{
-			closest[0] = CYLINDER;
-			closest[1] = i;
+			data->closest[0] = CYLINDER;
+			data->closest[1] = i;
 		}
 		++i;
 	}
+}
+
+int				hit_any_cylinder(t_data *data, const t_ray ray, double t)
+{
+	unsigned int			i;
+
+	i = 0;
+	while (i < data->scene.cylinders_nb)
+	{
+		if (hit_cylinder(ray, data->scene.cylinders[i], &t))
+			return (1);
+		++i;
+	}
+	return (0);
 }
