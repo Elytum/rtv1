@@ -110,7 +110,7 @@ t_vec3				vec3_roty(const t_vec3 vec, const double r)
 	cos_r = cos(r);
 	sin_r = sin(r);
 	ret.x = sin_r * vec.z + cos_r * vec.x;
-	ret.y = vec.z;
+	ret.y = vec.y;
 	ret.z = cos_r * vec.z - sin_r * vec.x;
 	return (ret);
 }

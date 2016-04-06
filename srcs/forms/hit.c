@@ -18,6 +18,8 @@ int				find_closest(t_data *data, const int get_normal)
 			return (sphere_normal(data));
 		else if (data->closest[0] == PLANE)
 			return (plane_normal(data));
+		else if (data->closest[0] == CYLINDER)
+			return (cylinder_normal(data));
 		return (1);
 	}
 	else

@@ -18,7 +18,7 @@ void	create_header(int fd)
 
 	h.camera_x = 0.0;
 	h.camera_y = 1500.0;
-	h.camera_z = -1000.0;
+	h.camera_z = -2000.0;
 	h.view = vec3_norm(vec3_new(0, 0, 1));
 	h.materials_nb = 3;
 	h.lights_nb = 2;//2;
@@ -41,12 +41,12 @@ void	create_materials(int fd)
 	add_element(fd, &m, sizeof(m));
 	m.r = 0.0;
 	m.b = 1.0;
-	m.c = 1;
+	m.c = 0;
 	// m.c = 1.5;
 	add_element(fd, &m, sizeof(m));
 	m.r = 1.0;
 	m.g = 0.0;
-	m.c = 1;
+	m.c = .5;
 	// m.c = 0.0;
 	add_element(fd, &m, sizeof(m));
 }
@@ -118,10 +118,10 @@ void	create_cylinders(int fd)
 	s.origin.y = 0;
 	s.origin.z = 0;
 	s.dir.x = 1;
-	s.dir.y = .5;
+	s.dir.y = 1;
 	s.dir.z = .1;
 	s.dir = vec3_norm(s.dir);
-	s.r = 7.8;
+	s.r = 100;
 	s.m = 0;
 	add_element(fd, &s, sizeof(s));
 	// s.r = 5.5;
