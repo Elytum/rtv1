@@ -29,6 +29,7 @@ void			init_scene(int fd, t_scene *scene)
 	scene->planes = extract_data(fd, sizeof(t_plane) * header.planes_nb);
 	scene->spheres = extract_data(fd, sizeof(t_sphere) * header.spheres_nb);
 	scene->cylinders = extract_data(fd, sizeof(t_cylinder) * header.cylinders_nb);
+	scene->cylinders_finite = extract_data(fd, sizeof(t_cylinder) * header.cylinders_finite_nb);
 	scene->cones = extract_data(fd, sizeof(t_cone) * header.cones_nb);
 	scene->camera_x = header.camera_x;
 	scene->camera_y = header.camera_y;
@@ -39,6 +40,7 @@ void			init_scene(int fd, t_scene *scene)
 	scene->planes_nb = header.planes_nb;
 	scene->spheres_nb = header.spheres_nb;
 	scene->cylinders_nb = header.cylinders_nb;
+	scene->cylinders_finite_nb = header.cylinders_finite_nb;
 	scene->cones_nb = header.cones_nb;
 		// if (read(fd, &header, 1))
 		// {

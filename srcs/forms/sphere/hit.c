@@ -29,13 +29,8 @@ int				hit_sphere(const t_ray ray, const t_sphere sphere, double *t)
 		t0 = b;
 	if (t0 < 0 || t0 > *t)
 		return (0);
-	// if (t0 < *t)
-	// {
-	// printf("\t\tt0: %f\n", t0);
 	*t = t0;
 	return (1);
-	// }
-	// return (0);
 }
 
 int				sphere_normal(t_data *data)

@@ -41,7 +41,7 @@ CREATE_OBJS		=	$(CREATE_SRCS:.c=.o)
 DESCRIBE_SRCS	=	$(addprefix srcs/, $(DESCRIBE_FILES))
 DESCRIBE_OBJS	=	$(DESCRIBE_SRCS:.c=.o)
 
-FORMS = plane sphere cylinder cone
+FORMS = plane sphere cylinder cone cylinder_finite
 
 FORM_CONTENT =	describe.c	\
 				hit.c

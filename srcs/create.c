@@ -25,6 +25,7 @@ void	create_header(int fd)
 	h.planes_nb = 1;
 	h.spheres_nb = 3;//3;//4;
 	h.cylinders_nb = 1;
+	h.cylinders_finite_nb = 0;//1;
 	h.cones_nb = 1;
 	write(fd, &h, sizeof(h));
 }
@@ -117,11 +118,30 @@ void	create_cylinders(int fd)
 	s.origin.x = 0;
 	s.origin.y = 0;
 	s.origin.z = 0;
-	s.dir.x = 1;
-	s.dir.y = 1;
-	s.dir.z = .1;
+	s.dir.x = 0;
+	s.dir.y = 0;
+	s.dir.z = 0;
 	s.dir = vec3_norm(s.dir);
 	s.r = 100;
+	s.m = 0;
+	add_element(fd, &s, sizeof(s));
+	// s.r = 5.5;
+	// add_element(fd, &s, sizeof(s));
+	// s.r = 6.5;
+	// add_element(fd, &s, sizeof(s));
+}
+
+void	create_cylinders_finite(int fd)
+{
+	t_cylinder_finite	s;
+
+	s.p.x = 1;
+	s.p.y = 0;
+	s.p.z = 0;
+	s.q.x = -1;
+	s.q.y = 0;
+	s.q.z = 0;
+	s.r = .05;
 	s.m = 0;
 	add_element(fd, &s, sizeof(s));
 	// s.r = 5.5;
@@ -158,6 +178,7 @@ void	create_sceen(int fd)
 	create_planes(fd);
 	create_spheres(fd);
 	create_cylinders(fd);
+	// create_cylinders_finite(fd);
 	create_cones(fd);
 }
 
