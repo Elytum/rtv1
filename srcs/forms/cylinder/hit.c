@@ -1,5 +1,6 @@
 #include <math.h>
 #include <forms.h>
+#include <ray.h>
 //https://github.com/mmp/pbrt-v2/blob/master/src/shapes/cylinder.cpp
 #define ABS(x)  ( ( (x) < 0) ? -(x) : (x) )
 #define EPSILON 1.19209290e-07F
@@ -201,33 +202,48 @@
 // eye -> rayOrg
 // R -> form.r
 
-void		moved_ray(t_ray ray, t_obj *tmp, int invert)
+t_vec3	rotate_all(t_vec3 vec, t_vec3 dir)
 {
-	// if (invert == 1)
-	// {
-	// 	all_rot(eye, &tmp->rot, invert);
-	// 	all_rot(vector, &tmp->rot, invert);
-	// }
-
-	t_ray	moved;
-
-	eye->x += invert * tmp->pos.x;
-	eye->y += invert * tmp->pos.y;
-	eye->z += invert * tmp->pos.z;
-	vector->x += invert * tmp->pos.x;
-	vector->y += invert * tmp->pos.y;
-	vector->z += invert * tmp->pos.z;
-
-	all_rot(eye, &tmp->rot, invert);
-	all_rot(vector, &tmp->rot, invert);
-
-	// if (invert == -1)
-	// {
-	// 	all_rot(eye, &tmp->rot, invert);
-	// 	all_rot(vector, &tmp->rot, invert);
-	// }
+	// return (vec3_rotx(vec3_roty(vec3_rotz(vec, dir.z), dir.y), dir.x));
+	return (vec3_rotz(vec3_roty(vec3_rotx(vec, dir.x), dir.y), dir.z));
 }
 
+t_ray		move_ray(t_ray ray, t_cylinder cylinder)
+{
+	t_ray	moved;
+
+	moved.start.x = ray.start.x - cylinder.origin.x;
+	moved.start.y = ray.start.y - cylinder.origin.y;
+	moved.start.z = ray.start.z - cylinder.origin.z;
+	// moved.start.x = ray.start.x;
+	// moved.start.y = ray.start.y;
+	// moved.start.z = ray.start.z;
+	moved.dir.x = ray.dir.x - cylinder.origin.x;
+	moved.dir.y = ray.dir.y - cylinder.origin.y;
+	moved.dir.z = ray.dir.z - cylinder.origin.z;
+	// moved.dir.x = ray.dir.x;
+	// moved.dir.y = ray.dir.y;
+	// moved.dir.z = ray.dir.z;
+
+	moved.start = rotate_all(moved.start, vec3_reverse(cylinder.dir));
+	moved.dir = rotate_all(moved.dir, vec3_reverse(cylinder.dir));
+	return moved;
+}
+
+/*
+	double	a;
+	double	b;
+	double	c;
+	double	delta;
+
+	a = pow(vector->x, 2) + pow(vector->y, 2);
+	b = 2 * (eye->x * vector->x + eye->y * vector->y);
+	c = pow(eye->x, 2) + pow(eye->y, 2) - pow(R / 1.5, 2);
+	delta = pow(b, 2) - 4 * a * c;
+	k[0] = (delta >= 0 ? (-b - sqrt(delta)) / (2 * a) : -1);
+	k[1] = (delta >= 0 ? (-b + sqrt(delta)) / (2 * a) : -1);
+*/
+	
 int				hit_cylinder(const t_ray ray, const t_cylinder cylinder, double *t)
 {//d -> ray.dir, V -> cylinder->dir, x -> ray.start
 	// double	a;// a = pow(vector->x, 2) + pow(vector->y, 2) + pow(vector->z, 2);
@@ -245,13 +261,13 @@ int				hit_cylinder(const t_ray ray, const t_cylinder cylinder, double *t)
 // k[0] = (delta >= 0 ? (-b - sqrt(delta)) / (2 * a) : -1);
 // k[1] = (delta >= 0 ? (-b + sqrt(delta)) / (2 * a) : -1);
 
-	t_ray	moved_ray = move_eye(ray, obj, -1);
-
+	t_ray	moved_ray = move_ray(ray, cylinder);
+(void)moved_ray;
 	double	a;
 	double	b;
 	double	c;
 	double	delta;
-	const t_vec3	rayOrg = vec3_sub(cylinder.origin, ray.start);	// ray in space of the sphere
+	// const t_vec3	rayOrg = vec3_sub(cylinder.origin, ray.start);	// ray in space of the sphere
 
 	// // a = ray.dir.x * ray.dir.x + ray.dir.y * ray.dir.y + ray.dir.z * ray.dir.z;
 	// a = vec3_dot(ray.dir, ray.dir);
@@ -264,14 +280,17 @@ int				hit_cylinder(const t_ray ray, const t_cylinder cylinder, double *t)
 	// if (delta < 0)
 	// 	return (0);
 
-	a = vec3_dot(ray.dir, ray.dir);
+	// a = vec3_dot(ray.dir, ray.dir);
+	a = moved_ray.dir.x * moved_ray.dir.x + moved_ray.dir.y * moved_ray.dir.y;
 	// b = 2 * vec3_dot(ray.dir, rayOrg);
-	b = 2 * (rayOrg.x * ray.dir.x + rayOrg.y * ray.dir.y);
+	// b = 2 * (rayOrg.x * ray.dir.x + rayOrg.y * ray.dir.y);
+	b = 2 * (moved_ray.start.x * moved_ray.dir.x + moved_ray.start.y * moved_ray.dir.y);
 	// c = vec3_dot(rayOrg, rayOrg) - cylinder.r / 1.5 * cylinder.r / 1.5;
-	c = rayOrg.x * rayOrg.x + rayOrg.y * rayOrg.y - (cylinder.r / 1.5) * (cylinder.r / 1.5);
+	// c = rayOrg.x * rayOrg.x + rayOrg.y * rayOrg.y - (cylinder.r / 1.5) * (cylinder.r / 1.5);
+	c = moved_ray.start.x * moved_ray.start.x + moved_ray.start.y * moved_ray.start.y - (cylinder.r / 1.5) * (cylinder.r / 1.5);
 
 	delta = b * b - 4 * a * c;
-	printf("delta: %f\n", delta);
+	// printf("delta: %f\n", delta);
 	if (delta == 0)
 	{
 		if (b >= 0)
@@ -285,7 +304,7 @@ int				hit_cylinder(const t_ray ray, const t_cylinder cylinder, double *t)
 		delta = sqrt(delta);
 		c = (-b - delta) / 2 * a;
 		delta = (-b + delta) / 2 * a;
-		printf("%f %f\n", c, delta);
+		// printf("%f %f\n", c, delta);
 		if (c >= 0 || delta >= 0)
 		{
 			*t = (c > delta) ? c : delta;
