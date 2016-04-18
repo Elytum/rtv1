@@ -65,12 +65,12 @@ void			init_data(t_data *data, int x, int y)
 
 int				get_color(t_data *data, int x, int y)
 {
-	// unsigned int	i;
+	unsigned int	i;
 
 	// Init data structure
 	init_data(data, x, y);
 	// As long as the ray can resbound
-	while (data->once || (data->coef > 0.0f && data->level < 1))
+	while (data->once || (data->coef > 0.0f && data->level < 2))
 	{
 		// We rememver we at least resbounded once
 		data->once = 0;
@@ -80,53 +80,53 @@ int				get_color(t_data *data, int x, int y)
 		if (!find_closest(data, 1))
 			break ;
 
-data->color[0] += data->material.r;
-data->color[1] += data->material.g;
-data->color[2] += data->material.b;
+// data->color[0] += data->material.r;
+// data->color[1] += data->material.g;
+// data->color[2] += data->material.b;
 
-		// // Else, handle it's color
-		// i = 0;
-		// // For every lights in the scene
-		// while (i < data->scene.lights_nb)
-		// {
-		// 	t_light		current = data->scene.lights[i];
-		// 	t_vec3		dist = vec3_sub(current.pos, data->new_start);
+		// Else, handle it's color
+		i = 0;
+		// For every lights in the scene
+		while (i < data->scene.lights_nb)
+		{
+			t_light		current = data->scene.lights[i];
+			t_vec3		dist = vec3_sub(current.pos, data->new_start);
 
-		// 	// If the light is perpendicular to the pixel, ignore it
-		// 	if (vec3_dot(data->normal, dist) <= 0.0f)
-		// 	{
-		// 		++i;
-		// 		continue ;
-		// 	}
-		// 	data->t = sqrt(vec3_dot(dist, dist));
-		// 	// Or if the light is on the other side of the pixel, ignore it
-		// 	if (data->t <= 0.0f)
-		// 	{
-		// 		++i;
-		// 		continue ;
-		// 	}
-		// 	// if (data->closest[1] == PLANE)
-		// 	// 	printf("First\n");
-		// 	// Else, create a new ray
-		// 	data->lightray.start = data->new_start;
-		// 	data->lightray.dir = vec3_mult(dist, 1 / data->t);
-		// 	// And if that ray doesn't cross anything between the actual point and the light's position
-		// 	if (!find_closest(data, 0))
-		// 	{
-		// 		// if (data->closest[1] == PLANE)
-		// 		// 	printf("Second\n");
-		// 		// Add it's color
-		// 		float lambert = vec3_dot(data->lightray.dir, data->normal) * data->coef;
-		// 		data->color[0] += lambert * current.r * data->material.r;
-		// 		data->color[1] += lambert * current.g * data->material.g;
-		// 		data->color[2] += lambert * current.b * data->material.b;
-		// 	}
-		// 	++i;
-		// }
-		// data->coef *= data->material.c;
-		// float reflet = 2.0f * vec3_dot(data->viewray.dir, data->normal);
-		// data->viewray.start = data->new_start;
-		// data->viewray.dir = vec3_sub(data->viewray.dir, vec3_mult(data->normal, reflet));
+			// If the light is perpendicular to the pixel, ignore it
+			if (vec3_dot(data->normal, dist) <= 0.0f)
+			{
+				++i;
+				continue ;
+			}
+			data->t = sqrt(vec3_dot(dist, dist));
+			// Or if the light is on the other side of the pixel, ignore it
+			if (data->t <= 0.0f)
+			{
+				++i;
+				continue ;
+			}
+			// if (data->closest[1] == PLANE)
+			// 	printf("First\n");
+			// Else, create a new ray
+			data->lightray.start = data->new_start;
+			data->lightray.dir = vec3_mult(dist, 1 / data->t);
+			// And if that ray doesn't cross anything between the actual point and the light's position
+			if (!find_closest(data, 0))
+			{
+				// if (data->closest[1] == PLANE)
+				// 	printf("Second\n");
+				// Add it's color
+				float lambert = vec3_dot(data->lightray.dir, data->normal) * data->coef;
+				data->color[0] += lambert * current.r * data->material.r;
+				data->color[1] += lambert * current.g * data->material.g;
+				data->color[2] += lambert * current.b * data->material.b;
+			}
+			++i;
+		}
+		data->coef *= data->material.c;
+		float reflet = 2.0f * vec3_dot(data->viewray.dir, data->normal);
+		data->viewray.start = data->new_start;
+		data->viewray.dir = vec3_sub(data->viewray.dir, vec3_mult(data->normal, reflet));
 		++data->level;
 	}
 	return (rgb_color(MIN(data->color[0] * 255.0f, 255.0f), MIN(data->color[1] * 255.0f, 255.0f), MIN(data->color[2] * 255.0f, 255)));

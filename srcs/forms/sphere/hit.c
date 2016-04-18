@@ -7,22 +7,15 @@ int				hit_sphere(const t_ray ray, const t_sphere sphere, double *t)
 	double	b;// b = 2 * (eye->x * vector->x + eye->y * vector->y + eye->z * vector->z);
 	double	c;// c = pow(eye->x, 2) + pow(eye->y, 2) + pow(eye->z, 2) - pow(R, 2);
 	double	delta;
-	// const t_vec3	rayOrg = vec3_sub(sphere.center, ray.start);	// ray in space of the sphere
 	const t_vec3	rayOrg = vec3_sub(ray.start, sphere.center);	// ray in space of the sphere
 
-	// a = ray.dir.x * ray.dir.x + ray.dir.y * ray.dir.y + ray.dir.z * ray.dir.z;
 	a = vec3_dot(ray.dir, ray.dir);
 	b = 2 * vec3_dot(ray.dir, rayOrg);
-	// b = 2 * (rayOrg.x * ray.dir.x + rayOrg.y * ray.dir.y + rayOrg.z * ray.dir.z);
-	// c = rayOrg.x * rayOrg.x + rayOrg.y * rayOrg.y + rayOrg.z * rayOrg.z - sphere.r * sphere.r;
 	c = vec3_dot(rayOrg, rayOrg) - sphere.r * sphere.r;
-	// delta = b * b - 4 * a * c;
 	delta = b * b - 4 * a * c;
-	// if (delta < 0)
-	// 	return (0);
 	if (delta == 0)
 	{
-		if (b >= 0)
+		if (b >= 0.1)
 		{
 			*t = b;
 			return (1);
@@ -31,11 +24,9 @@ int				hit_sphere(const t_ray ray, const t_sphere sphere, double *t)
 	else if (delta >= 0)
 	{
 		delta = sqrt(delta);
-		// c = (-b - delta) / 2 * a;
-		// delta = (-b + delta) / 2 * a;
 		c = (-b - delta) / 2 * a;
 		delta = (-b + delta) / 2 * a;
-		if (c >= 0 || delta >= 0)
+		if (c >= 0.1 || delta >= 0.1)
 		{
 			*t = (c < delta) ? c : delta;
 			return (1);
@@ -107,6 +98,7 @@ int				sphere_normal(t_data *data)
 
 	intersect = vec3_add(ray.start, vec3_mult(ray.dir, data->t));
 	data->normal = vec3_norm(vec3_sub(intersect, sphere.center));
+	// data->normal = vec3_mult(vec3_sub(intersect, sphere.center), 1 / sphere.r);
 	data->material = data->scene.materials[data->scene.spheres[data->closest[1]].m];
 	data->new_start = vec3_add(data->viewray.start, vec3_mult(data->viewray.dir, data->t));
 	return 1;

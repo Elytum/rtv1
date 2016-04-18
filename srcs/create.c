@@ -70,14 +70,16 @@ void	create_lights(int fd)
 	// l.pos.x = 0.0;
 	// l.pos.y = -100.0;
 	// l.pos.z = -100.0;
-	l.pos.x = 0.0;
-	l.pos.y = 1000.0;
-	l.pos.z = 100.0;
+	l.pos.x = -100.0;
+	l.pos.y = 0.0;
+	l.pos.z = -100.0;
 	l.r = 1.0;
 	l.g = 1.0;
 	l.b = 1.0;
 	add_element(fd, &l, sizeof(l));
-	l.pos.z = -1000.0;
+	l.pos.x = 100.0;
+	l.pos.y = 0.0;
+	l.pos.z = -100.0;
 	l.r = 0.6;
 	l.g = 0.7;
 	l.b = 1.0;
@@ -237,18 +239,19 @@ void	create_cylinders_finite(int fd)
 
 void	create_cones(int fd)
 {
-	t_cone		s;
+	(void)fd;
+	// t_cone		s;
 
-	s.x1 = 1.2;
-	s.y1 = 2.3;
-	s.z1 = 3.4;
-	s.r1 = 7.8;
-	s.x2 = 4.5;
-	s.y2 = 5.6;
-	s.z2 = 6.7;
-	s.r2 = 8.9;
-	s.m = 0;
-	add_element(fd, &s, sizeof(s));
+	// s.x1 = 1.2;
+	// s.y1 = 2.3;
+	// s.z1 = 3.4;
+	// s.r1 = 7.8;
+	// s.x2 = 4.5;
+	// s.y2 = 5.6;
+	// s.z2 = 6.7;
+	// s.r2 = 8.9;
+	// s.m = 0;
+	// add_element(fd, &s, sizeof(s));
 }
 
 void	create_sceen(int fd)
