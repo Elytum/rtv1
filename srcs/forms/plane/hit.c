@@ -8,7 +8,8 @@ int				hit_plane(const t_ray ray, const t_plane plane, double *t)
 
 	if (dv == 0)
 		return (0);
-	tmp = (-vec3_dot(plane.normal, vec3_sub(plane.coord, ray.start))) / dv;
+	// tmp = (-vec3_dot(plane.normal, vec3_sub(plane.coord, ray.start))) / dv;
+	tmp = (-vec3_dot(plane.normal, vec3_sub(ray.start, plane.coord))) / dv;
 	if (tmp < 0 || tmp > *t)
 		return (0);
 	// printf("\t\ttmp: %f\n", tmp);

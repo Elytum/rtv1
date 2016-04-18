@@ -246,72 +246,125 @@ t_ray		move_ray(t_ray ray, t_cylinder cylinder)
 	
 int				hit_cylinder(const t_ray ray, const t_cylinder cylinder, double *t)
 {//d -> ray.dir, V -> cylinder->dir, x -> ray.start
-	// double	a;// a = pow(vector->x, 2) + pow(vector->y, 2) + pow(vector->z, 2);
-	// double	b;// b = 2 * (eye->x * vector->x + eye->y * vector->y + eye->z * vector->z);
-	// double	c;// c = pow(eye->x, 2) + pow(eye->y, 2) + pow(eye->z, 2) - pow(R, 2);
-// double	a;
-// double	b;
-// double	c;
-// double	delta;
+// static t_vec	*rt_cylindre(t_ray ray, t_cylindre *cylindre, float *distance)
+// {
+	float			a;
+	float			b;
+	float			c;
+	float			delta;
+	float			dist1;
+	float			dist2;
+	t_vec3			tmp1;
+	t_vec3			origin;
+	t_vec3			tmp2;
+	// t_vec3			raydir;
 
-// a = pow(vector->x, 2) + pow(vector->y, 2);
-// b = 2 * (eye->x * vector->x + eye->y * vector->y);
-// c = pow(eye->x, 2) + pow(eye->y, 2) - pow(R / 1.5, 2);
-// delta = pow(b, 2) - 4 * a * c;
-// k[0] = (delta >= 0 ? (-b - sqrt(delta)) / (2 * a) : -1);
-// k[1] = (delta >= 0 ? (-b + sqrt(delta)) / (2 * a) : -1);
-
-	t_ray	moved_ray = move_ray(ray, cylinder);
-(void)moved_ray;
-	double	a;
-	double	b;
-	double	c;
-	double	delta;
-	// const t_vec3	rayOrg = vec3_sub(cylinder.origin, ray.start);	// ray in space of the sphere
-
-	// // a = ray.dir.x * ray.dir.x + ray.dir.y * ray.dir.y + ray.dir.z * ray.dir.z;
-	// a = vec3_dot(ray.dir, ray.dir);
-	// b = 2 * vec3_dot(ray.dir, rayOrg);
-	// // b = 2 * (rayOrg.x * ray.dir.x + rayOrg.y * ray.dir.y + rayOrg.z * ray.dir.z);
-	// // c = rayOrg.x * rayOrg.x + rayOrg.y * rayOrg.y + rayOrg.z * rayOrg.z - sphere.r * sphere.r;
-	// c = vec3_dot(rayOrg, rayOrg) - sphere.r * sphere.r;
-	// // delta = b * b - 4 * a * c;
-	// delta = b * b - 4 * a * c;
-	// if (delta < 0)
-	// 	return (0);
-
-	// a = vec3_dot(ray.dir, ray.dir);
-	a = moved_ray.dir.x * moved_ray.dir.x + moved_ray.dir.y * moved_ray.dir.y;
-	// b = 2 * vec3_dot(ray.dir, rayOrg);
-	// b = 2 * (rayOrg.x * ray.dir.x + rayOrg.y * ray.dir.y);
-	b = 2 * (moved_ray.start.x * moved_ray.dir.x + moved_ray.start.y * moved_ray.dir.y);
-	// c = vec3_dot(rayOrg, rayOrg) - cylinder.r / 1.5 * cylinder.r / 1.5;
-	// c = rayOrg.x * rayOrg.x + rayOrg.y * rayOrg.y - (cylinder.r / 1.5) * (cylinder.r / 1.5);
-	c = moved_ray.start.x * moved_ray.start.x + moved_ray.start.y * moved_ray.start.y - (cylinder.r / 1.5) * (cylinder.r / 1.5);
-
-	delta = b * b - 4 * a * c;
-	// printf("delta: %f\n", delta);
-	if (delta == 0)
+	//float	m;
+	// origin = sous_vectors(ray.start, cylindre->pos);
+	origin = vec3_sub(ray.start, cylinder.origin);
+	// origin = vec3_sub(cylinder.origin, ray.start);
+	// tmp1 = sous_vectors(ray.dir, mult_vector(cylindre->axe, dot_product(ray.dir, cylindre->axe)));
+	tmp1 = vec3_sub(ray.dir, vec3_mult(cylinder.dir, vec3_dot(ray.dir, cylinder.dir)));
+	// tmp2 = sous_vectors(origin, mult_vector(cylindre->axe, dot_product(origin, cylindre->axe)));
+	tmp2 = vec3_sub(origin, vec3_mult(cylinder.dir, vec3_dot(origin, cylinder.dir)));
+	// a = dot_product(tmp1, tmp1);
+	a = vec3_dot(tmp1, tmp1);
+	// b = 2 * dot_product(tmp1, tmp2);
+	b = 2 * vec3_dot(tmp1, tmp2);
+	// c = dot_product(tmp2, tmp2) - carre(cylindre->radius);
+	c = vec3_dot(tmp2, tmp2) - cylinder.r * cylinder.r;
+	// if ((delta = carre(b) - (4 * a * c)) < 0)
+	if ((delta = b * b - (4 * a * c)) < 0)
+		return (0);
+	else
 	{
-		if (b >= 0)
+		dist1 = (b * -1.0 + sqrt(delta)) / (2.0 * a);
+		dist2 = (b * -1.0 - sqrt(delta)) / (2.0 * a);
+		if (dist1 < 0.0 && dist2 < 0.0)
+			return (0);
+		else if (dist1 >= 0.0 && dist2 >= 0.0)
+			dist1 = dist2;
+		if (dist1 >= 0.0 && dist1 < *t)
 		{
-			*t = b;
+			*t = dist1;
 			return (1);
-		}
-	}
-	else if (delta >= 0)
-	{
-		delta = sqrt(delta);
-		c = (-b - delta) / 2 * a;
-		delta = (-b + delta) / 2 * a;
-		// printf("%f %f\n", c, delta);
-		if (c >= 0 || delta >= 0)
-		{
-			*t = (c > delta) ? c : delta;
-			return (1);
+			// raydir = add_vectors(ray.start, mult_vector(ray.dir, *t));
+			//m = dot_product(ray.dir, cylindre->axe) * *distance + dot_product(origin, cylindre->axe);
+			//return (div_vector(sous_vectors(raydir, cylindre->axe), m));
+			// return (sous_vectors(rt_init_vec(raydir->x, 0.0, raydir->z), rt_init_vec(cylindre->pos->x, 0.0, cylindre->pos->z)));
 		}
 	}
 	return (0);
+// }
+
+
+
+// 	// double	a;// a = pow(vector->x, 2) + pow(vector->y, 2) + pow(vector->z, 2);
+// 	// double	b;// b = 2 * (eye->x * vector->x + eye->y * vector->y + eye->z * vector->z);
+// 	// double	c;// c = pow(eye->x, 2) + pow(eye->y, 2) + pow(eye->z, 2) - pow(R, 2);
+// // double	a;
+// // double	b;
+// // double	c;
+// // double	delta;
+
+// // a = pow(vector->x, 2) + pow(vector->y, 2);
+// // b = 2 * (eye->x * vector->x + eye->y * vector->y);
+// // c = pow(eye->x, 2) + pow(eye->y, 2) - pow(R / 1.5, 2);
+// // delta = pow(b, 2) - 4 * a * c;
+// // k[0] = (delta >= 0 ? (-b - sqrt(delta)) / (2 * a) : -1);
+// // k[1] = (delta >= 0 ? (-b + sqrt(delta)) / (2 * a) : -1);
+
+// 	t_ray	moved_ray = move_ray(ray, cylinder);
+// (void)moved_ray;
+// 	double	a;
+// 	double	b;
+// 	double	c;
+// 	double	delta;
+// 	// const t_vec3	rayOrg = vec3_sub(cylinder.origin, ray.start);	// ray in space of the sphere
+
+// 	// // a = ray.dir.x * ray.dir.x + ray.dir.y * ray.dir.y + ray.dir.z * ray.dir.z;
+// 	// a = vec3_dot(ray.dir, ray.dir);
+// 	// b = 2 * vec3_dot(ray.dir, rayOrg);
+// 	// // b = 2 * (rayOrg.x * ray.dir.x + rayOrg.y * ray.dir.y + rayOrg.z * ray.dir.z);
+// 	// // c = rayOrg.x * rayOrg.x + rayOrg.y * rayOrg.y + rayOrg.z * rayOrg.z - sphere.r * sphere.r;
+// 	// c = vec3_dot(rayOrg, rayOrg) - sphere.r * sphere.r;
+// 	// // delta = b * b - 4 * a * c;
+// 	// delta = b * b - 4 * a * c;
+// 	// if (delta < 0)
+// 	// 	return (0);
+
+// 	// a = vec3_dot(ray.dir, ray.dir);
+// 	a = moved_ray.dir.x * moved_ray.dir.x + moved_ray.dir.y * moved_ray.dir.y;
+// 	// b = 2 * vec3_dot(ray.dir, rayOrg);
+// 	// b = 2 * (rayOrg.x * ray.dir.x + rayOrg.y * ray.dir.y);
+// 	b = 2 * (moved_ray.start.x * moved_ray.dir.x + moved_ray.start.y * moved_ray.dir.y);
+// 	// c = vec3_dot(rayOrg, rayOrg) - cylinder.r / 1.5 * cylinder.r / 1.5;
+// 	// c = rayOrg.x * rayOrg.x + rayOrg.y * rayOrg.y - (cylinder.r / 1.5) * (cylinder.r / 1.5);
+// 	c = moved_ray.start.x * moved_ray.start.x + moved_ray.start.y * moved_ray.start.y - (cylinder.r / 1.5) * (cylinder.r / 1.5);
+
+// 	delta = b * b - 4 * a * c;
+// 	// printf("delta: %f\n", delta);
+// 	if (delta == 0)
+// 	{
+// 		if (b >= 0)
+// 		{
+// 			*t = b;
+// 			return (1);
+// 		}
+// 	}
+// 	else if (delta >= 0)
+// 	{
+// 		delta = sqrt(delta);
+// 		c = (-b - delta) / 2 * a;
+// 		delta = (-b + delta) / 2 * a;
+// 		// printf("%f %f\n", c, delta);
+// 		if (c >= 0 || delta >= 0)
+// 		{
+// 			*t = (c > delta) ? c : delta;
+// 			return (1);
+// 		}
+// 	}
+// 	return (0);
 
 
 

@@ -17,18 +17,18 @@ void	create_header(int fd)
 	t_header	h;
 
 	h.camera_x = 0.0;
-	h.camera_y = 1000.0;
-	h.camera_z = 10000.0;
+	h.camera_y = 0.0;
+	h.camera_z = -100.0;
 	// h.camera_y = 10.0;
 	// h.camera_z = 500.0;
 	h.view = vec3_norm(vec3_new(0, 0, 1));
 	h.materials_nb = 3;
 	h.lights_nb = 3;//2;
-	h.planes_nb = 1;
-	h.spheres_nb = 3;//3;//4;
-	h.cylinders_nb = 1;
+	h.planes_nb = 2;//1;//0;//1;
+	h.spheres_nb = 0;//3;//4;
+	h.cylinders_nb = 4;//1;
 	h.cylinders_finite_nb = 0;//1;
-	h.cones_nb = 1;
+	h.cones_nb = 0;
 	write(fd, &h, sizeof(h));
 }
 
@@ -87,13 +87,13 @@ void	create_planes(int fd)
 	t_plane	s;
 
 	s.m = 1;
-	s.normal.x = 0.0;
-	s.normal.y = 1.1;
-	s.normal.z = 0.1;
-	s.normal = vec3_norm(s.normal);
+	s.normal = vec3_norm(vec3_new(0, 0, 1));
 	s.coord.x = 0.0;
 	s.coord.y = 0.0;
-	s.coord.z = -10000.0;
+	s.coord.z = 35.0;
+	add_element(fd, &s, sizeof(s));
+	s.m = 0;
+	s.normal = vec3_norm(vec3_new(0, 1, 0));
 	add_element(fd, &s, sizeof(s));
 }
 
@@ -124,12 +124,20 @@ void	create_cylinders(int fd)
 {
 	t_cylinder	s;
 
-	s.origin.x = 0;
 	s.origin.y = 0;
-	s.origin.z = 0;
-	s.dir = vec3_norm(vec3_new(0, 0, -1));
-	s.r = 200;
+	s.dir = vec3_norm(vec3_new(0, 1, 0));
+	s.r = 10;
 	s.m = 2;
+
+	s.origin.z = 0;
+	s.origin.x = -75;
+	add_element(fd, &s, sizeof(s));
+	s.origin.x = 75;
+	add_element(fd, &s, sizeof(s));
+	s.origin.z = 20;
+	s.origin.x = -50;
+	add_element(fd, &s, sizeof(s));
+	s.origin.x = 50;
 	add_element(fd, &s, sizeof(s));
 	// s.r = 5.5;
 	// add_element(fd, &s, sizeof(s));
@@ -183,10 +191,10 @@ void	create_sceen(int fd)
 	create_materials(fd);
 	create_lights(fd);
 	create_planes(fd);
-	create_spheres(fd);
+	// create_spheres(fd);
 	create_cylinders(fd);
 	// create_cylinders_finite(fd);
-	create_cones(fd);
+	// create_cones(fd);
 }
 
 int		main(int ac, char **av)

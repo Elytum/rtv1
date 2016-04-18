@@ -7,7 +7,8 @@ int				hit_sphere(const t_ray ray, const t_sphere sphere, double *t)
 	double	b;// b = 2 * (eye->x * vector->x + eye->y * vector->y + eye->z * vector->z);
 	double	c;// c = pow(eye->x, 2) + pow(eye->y, 2) + pow(eye->z, 2) - pow(R, 2);
 	double	delta;
-	const t_vec3	rayOrg = vec3_sub(sphere.center, ray.start);	// ray in space of the sphere
+	// const t_vec3	rayOrg = vec3_sub(sphere.center, ray.start);	// ray in space of the sphere
+	const t_vec3	rayOrg = vec3_sub(ray.start, sphere.center);	// ray in space of the sphere
 
 	// a = ray.dir.x * ray.dir.x + ray.dir.y * ray.dir.y + ray.dir.z * ray.dir.z;
 	a = vec3_dot(ray.dir, ray.dir);
