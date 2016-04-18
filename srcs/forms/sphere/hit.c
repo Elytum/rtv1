@@ -37,7 +37,7 @@ int				hit_sphere(const t_ray ray, const t_sphere sphere, double *t)
 		delta = (-b + delta) / 2 * a;
 		if (c >= 0 || delta >= 0)
 		{
-			*t = (c > delta) ? c : delta;
+			*t = (c < delta) ? c : delta;
 			return (1);
 		}
 	}
