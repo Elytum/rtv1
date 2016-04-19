@@ -39,9 +39,6 @@ int				hit_cylinder(const t_ray ray, const t_cylinder cylinder, double *t)
 	return (0);
 }
 
-//	raydir = add_vectors(ray.start, mult_vector(ray.dir, *t));
-//	return (sous_vectors(rt_init_vec(raydir->x, 0.0, raydir->z), rt_init_vec(cylindre->pos->x, 0.0, cylindre->pos->z)));
-
 int				cylinder_normal(t_data *data)
 {
 	const t_cylinder	cylinder = data->scene.cylinders[data->closest[1]];
@@ -49,9 +46,6 @@ int				cylinder_normal(t_data *data)
 	t_vec3				intersect;
 
 	intersect = vec3_add(ray.start, vec3_mult(ray.dir, data->t));
-	// data->normal = vec3_norm(vec3_sub(intersect, cylinder.origin));
-	// data->normal = vec3_norm(vec3_sub(vec3_new(ray.dir.x, 0, ray.dir.z), vec3_new(cylinder.origin.x, 0, cylinder.origin.z)));
-	// data->normal = vec3_norm(vec3_sub(intersect, cylinder.origin));
 	data->normal = vec3_norm(vec3_sub(vec3_new(intersect.x, 0, intersect.z), vec3_new(cylinder.origin.x, 0, cylinder.origin.z)));
 	data->material = data->scene.materials[data->scene.cylinders[data->closest[1]].m];
 	data->new_start = vec3_add(data->viewray.start, vec3_mult(data->viewray.dir, data->t));

@@ -1,36 +1,105 @@
 #include <math.h>
 #include <forms.h>
 
+/*
+static t_vec	*rt_cone(t_ray ray, t_cone *cone, float *distance)
+{
+	float	a;
+	float	b;
+	float	c;
+	float	delta;
+	float	dist1;
+	float	dist2;
+	float	alpha;
+	t_vec	*tmp1;
+	t_vec	*origin;
+	t_vec	*tmp2;
+	t_vec	*raydir;
+
+	alpha = cone->angle / 180 * M_PI;
+	origin = sous_vectors(ray.start, cone->pos);
+	tmp1 = sous_vectors(ray.dir, mult_vector(cone->axe, dot_product(ray.dir, cone->axe)));
+	tmp2 = sous_vectors(origin, mult_vector(cone->axe, dot_product(origin, cone->axe)));
+	a = (pow(cos(alpha), 2) * dot_product(tmp1, tmp1)) - (pow(sin(alpha), 2) * carre(dot_product(ray.dir, cone->axe)));
+	b = 2 * (pow(cos(alpha), 2) * dot_product(tmp1, tmp2)) - 2 * (pow(sin(alpha), 2) * dot_product(ray.dir, cone->axe) * dot_product(origin, cone->axe));
+	c = (pow(cos(alpha), 2) * dot_product(tmp2, tmp2)) - (pow(sin(alpha), 2) * carre(dot_product(origin, cone->axe)));
+	if ((delta = carre(b) - (4 * a * c)) < 0)
+		return (0);
+	else
+	{
+		dist1 = (b * -1 + sqrt(delta)) / (2 * a);
+		dist2 = (b * -1 - sqrt(delta)) / (2 * a);
+		if (dist1 < 0.0 && dist2 < 0.0)
+			return (0);
+		else if (dist1 >= 0 && dist2 >= 0)
+			dist1 = dist2;
+		if (dist1 >= 0.0 && dist1 < *distance)
+		{
+			*distance = dist1;
+			raydir = add_vectors(ray.start, mult_vector(ray.dir, *distance));
+			return (sous_vectors(raydir, cone->pos));
+		}
+	}
+	return (NULL);
+}
+*/
 int				hit_cone(const t_ray ray, const t_cone cone, double *t)
 {
 	return (0);
 	(void)ray;
 	(void)cone;
 	(void)t;
-	// t_vec3		dist;
-	// float		b;
-	// float		d;
-	// float		t0;
-	// float		t1;
-	// int			ret;
+	
+	float			a;
+	float			b;
+	float			c;
+	float			delta;
+	float			dist1;
+	float			dist2;
+	float			alpha;
+	t_vec3			tmp1;
+	t_vec3			origin;
+	t_vec3			tmp2;
+	t_vec3			raydir;
 
-	// dist = vec3_sub(sphere.center, ray.start);
-	// b = vec3_dot(ray.dir, dist);
-	// d = b * b - vec3_dot(dist, dist) + sphere.r * sphere.r;
-	// t0 = b - sqrt(d);
-	// t1 = b + sqrt(d);
-	// ret = 0;
-	// if (t0 > 1 && t0 < *t)
-	// {
-	// 	*t = t0;
-	// 	ret = 1;
-	// }
-	// if (t1 > 1 && t1 < *t)
-	// {
-	// 	*t = t1;
-	// 	ret = 1;
-	// }
-	// return (ret);
+	// alpha = cone.
+	origin = vec3_sub(ray.start, cone.origin);
+	tmp1 = vec3_sub(ray.dir, vec3_mult(cone.dir, vec3_dot(ray.dir, cone.dir)));
+	tmp2 = vec3_sub(origin, vec3_mult(cone.dir, vec3_dot(origin, cone.dir)));
+	// a = vec3_dot(tmp1, tmp1);
+	// b = 2 * vec3_dot(tmp1, tmp2);
+	// c = vec3_dot(tmp2, tmp2) - cylinder.r * cylinder.r;
+	if ((delta = b * b - (4 * a * c)) < 0)
+		return (0);
+	else
+	{
+		dist1 = (b * -1.0 + sqrt(delta)) / (2.0 * a);
+		dist2 = (b * -1.0 - sqrt(delta)) / (2.0 * a);
+		if (dist1 < 0.1 && dist2 < 0.1)
+			return (0);
+		else if (dist1 >= 0.1 && dist2 >= 0.1)
+			dist1 = dist2;
+		if (dist1 >= 0.1 && dist1 < *t)
+		{
+			*t = dist1;
+			return (1);
+		}
+	}
+	return (0);
+}
+
+int				cone_normal(t_data *data)
+{
+	// const t_cylinder	cylinder = data->scene.cylinders[data->closest[1]];
+	// const t_ray			ray = data->viewray;
+	// t_vec3				intersect;
+
+	// intersect = vec3_add(ray.start, vec3_mult(ray.dir, data->t));
+	// data->normal = vec3_norm(vec3_sub(vec3_new(intersect.x, 0, intersect.z), vec3_new(cylinder.origin.x, 0, cylinder.origin.z)));
+	// data->material = data->scene.materials[data->scene.cylinders[data->closest[1]].m];
+	// data->new_start = vec3_add(data->viewray.start, vec3_mult(data->viewray.dir, data->t));
+	return 1;
+	(void)data;
 }
 
 void			find_closest_cone(t_data *data, const t_ray ray, double *t)
@@ -62,3 +131,87 @@ int				hit_any_cone(t_data *data, const t_ray ray, double t)
 	}
 	return (0);
 }
+
+// #include <math.h>
+// #include <forms.h>
+// #include <ray.h>
+	
+// int				hit_cylinder(const t_ray ray, const t_cylinder cylinder, double *t)
+// {
+// 	float			a;
+// 	float			b;
+// 	float			c;
+// 	float			delta;
+// 	float			dist1;
+// 	float			dist2;
+// 	t_vec3			tmp1;
+// 	t_vec3			origin;
+// 	t_vec3			tmp2;
+
+// 	origin = vec3_sub(ray.start, cylinder.origin);
+// 	tmp1 = vec3_sub(ray.dir, vec3_mult(cylinder.dir, vec3_dot(ray.dir, cylinder.dir)));
+// 	tmp2 = vec3_sub(origin, vec3_mult(cylinder.dir, vec3_dot(origin, cylinder.dir)));
+// 	a = vec3_dot(tmp1, tmp1);
+// 	b = 2 * vec3_dot(tmp1, tmp2);
+// 	c = vec3_dot(tmp2, tmp2) - cylinder.r * cylinder.r;
+// 	if ((delta = b * b - (4 * a * c)) < 0)
+// 		return (0);
+// 	else
+// 	{
+// 		dist1 = (b * -1.0 + sqrt(delta)) / (2.0 * a);
+// 		dist2 = (b * -1.0 - sqrt(delta)) / (2.0 * a);
+// 		if (dist1 < 0.1 && dist2 < 0.1)
+// 			return (0);
+// 		else if (dist1 >= 0.1 && dist2 >= 0.1)
+// 			dist1 = dist2;
+// 		if (dist1 >= 0.1 && dist1 < *t)
+// 		{
+// 			*t = dist1;
+// 			return (1);
+// 		}
+// 	}
+// 	return (0);
+// }
+
+// int				cylinder_normal(t_data *data)
+// {
+// 	const t_cylinder	cylinder = data->scene.cylinders[data->closest[1]];
+// 	const t_ray			ray = data->viewray;
+// 	t_vec3				intersect;
+
+// 	intersect = vec3_add(ray.start, vec3_mult(ray.dir, data->t));
+// 	data->normal = vec3_norm(vec3_sub(vec3_new(intersect.x, 0, intersect.z), vec3_new(cylinder.origin.x, 0, cylinder.origin.z)));
+// 	data->material = data->scene.materials[data->scene.cylinders[data->closest[1]].m];
+// 	data->new_start = vec3_add(data->viewray.start, vec3_mult(data->viewray.dir, data->t));
+// 	return 1;
+// }
+
+// void			find_closest_cylinder(t_data *data, const t_ray ray, double *t)
+// {
+// 	unsigned int			i;
+
+// 	i = 0;
+// 	while (i < data->scene.cylinders_nb)
+// 	{
+// 		if (hit_cylinder(ray, data->scene.cylinders[i], t))
+// 		{
+// 			data->closest[0] = CYLINDER;
+// 			data->closest[1] = i;
+// 		}
+// 		++i;
+// 	}
+// }
+
+// int				hit_any_cylinder(t_data *data, const t_ray ray, double t)
+// {
+// 	unsigned int			i;
+
+// 	i = 0;
+// 	while (i < data->scene.cylinders_nb)
+// 	{
+// 		if (hit_cylinder(ray, data->scene.cylinders[i], &t))
+// 			return (1);
+// 		++i;
+// 	}
+// 	return (0);
+// }
