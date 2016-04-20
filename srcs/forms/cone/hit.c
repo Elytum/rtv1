@@ -50,42 +50,42 @@ int				hit_cone(const t_ray ray, const t_cone cone, double *t)
 	(void)cone;
 	(void)t;
 	
-	float			a;
-	float			b;
-	float			c;
-	float			delta;
-	float			dist1;
-	float			dist2;
-	float			alpha;
-	t_vec3			tmp1;
-	t_vec3			origin;
-	t_vec3			tmp2;
-	t_vec3			raydir;
+	// float			a;
+	// float			b;
+	// float			c;
+	// float			delta;
+	// float			dist1;
+	// float			dist2;
+	// float			alpha;
+	// t_vec3			tmp1;
+	// t_vec3			origin;
+	// t_vec3			tmp2;
+	// t_vec3			raydir;
 
-	// alpha = cone.
-	origin = vec3_sub(ray.start, cone.origin);
-	tmp1 = vec3_sub(ray.dir, vec3_mult(cone.dir, vec3_dot(ray.dir, cone.dir)));
-	tmp2 = vec3_sub(origin, vec3_mult(cone.dir, vec3_dot(origin, cone.dir)));
-	// a = vec3_dot(tmp1, tmp1);
-	// b = 2 * vec3_dot(tmp1, tmp2);
-	// c = vec3_dot(tmp2, tmp2) - cylinder.r * cylinder.r;
-	if ((delta = b * b - (4 * a * c)) < 0)
-		return (0);
-	else
-	{
-		dist1 = (b * -1.0 + sqrt(delta)) / (2.0 * a);
-		dist2 = (b * -1.0 - sqrt(delta)) / (2.0 * a);
-		if (dist1 < 0.1 && dist2 < 0.1)
-			return (0);
-		else if (dist1 >= 0.1 && dist2 >= 0.1)
-			dist1 = dist2;
-		if (dist1 >= 0.1 && dist1 < *t)
-		{
-			*t = dist1;
-			return (1);
-		}
-	}
-	return (0);
+	// // alpha = cone.
+	// origin = vec3_sub(ray.start, cone.origin);
+	// tmp1 = vec3_sub(ray.dir, vec3_mult(cone.dir, vec3_dot(ray.dir, cone.dir)));
+	// tmp2 = vec3_sub(origin, vec3_mult(cone.dir, vec3_dot(origin, cone.dir)));
+	// // a = vec3_dot(tmp1, tmp1);
+	// // b = 2 * vec3_dot(tmp1, tmp2);
+	// // c = vec3_dot(tmp2, tmp2) - cylinder.r * cylinder.r;
+	// if ((delta = b * b - (4 * a * c)) < 0)
+	// 	return (0);
+	// else
+	// {
+	// 	dist1 = (b * -1.0 + sqrt(delta)) / (2.0 * a);
+	// 	dist2 = (b * -1.0 - sqrt(delta)) / (2.0 * a);
+	// 	if (dist1 < 0.1 && dist2 < 0.1)
+	// 		return (0);
+	// 	else if (dist1 >= 0.1 && dist2 >= 0.1)
+	// 		dist1 = dist2;
+	// 	if (dist1 >= 0.1 && dist1 < *t)
+	// 	{
+	// 		*t = dist1;
+	// 		return (1);
+	// 	}
+	// }
+	// return (0);
 }
 
 int				cone_normal(t_data *data)
