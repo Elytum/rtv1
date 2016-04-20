@@ -70,7 +70,7 @@ int				get_color(t_data *data, int x, int y)
 	// Init data structure
 	init_data(data, x, y);
 	// As long as the ray can resbound
-	while (data->once || (data->coef > 0.0f && data->level < 2))
+	while (data->once || (data->coef > 0.0f && data->level < 1))
 	{
 		// We rememver we at least resbounded once
 		data->once = 0;
@@ -105,16 +105,12 @@ int				get_color(t_data *data, int x, int y)
 				++i;
 				continue ;
 			}
-			// if (data->closest[1] == PLANE)
-			// 	printf("First\n");
 			// Else, create a new ray
 			data->lightray.start = data->new_start;
 			data->lightray.dir = vec3_mult(dist, 1 / data->t);
 			// And if that ray doesn't cross anything between the actual point and the light's position
 			if (!find_closest(data, 0))
 			{
-				// if (data->closest[1] == PLANE)
-				// 	printf("Second\n");
 				// Add it's color
 				float lambert = vec3_dot(data->lightray.dir, data->normal) * data->coef;
 				lambert = exp(lambert) * pow(lambert, 50) + lambert;
@@ -128,20 +124,6 @@ int				get_color(t_data *data, int x, int y)
 		float reflet = 2.0f * vec3_dot(data->viewray.dir, data->normal);
 		data->viewray.start = data->new_start;
 		data->viewray.dir = vec3_sub(data->viewray.dir, vec3_mult(data->normal, reflet));
-		// if (vec3_dot(vec3_mult(data->normal, reflet), vec3_mult(data->normal, reflet)) > 5)
-		// {
-			// data->color[0] += vec3_dot(vec3_mult(data->normal, reflet), vec3_mult(data->normal, reflet)) / 30;
-			// data->color[1] += vec3_dot(vec3_mult(data->normal, reflet), vec3_mult(data->normal, reflet)) / 30;
-			// data->color[2] += vec3_dot(vec3_mult(data->normal, reflet), vec3_mult(data->normal, reflet)) / 30;
-		// double v = vec3_dot(vec3_mult(data->normal, reflet), vec3_mult(data->normal, reflet));
-		// dprintf(1, "%f\n", v);
-		// if (v > 2)
-		// {
-		// 	data->color[0] += exp(v);
-		// 	data->color[1] += exp(v);
-		// 	data->color[2] += exp(v);
-		// }
-		// }
 		++data->level;
 	}
 	return (rgb_color(MIN(data->color[0] * 255.0f, 255.0f), MIN(data->color[1] * 255.0f, 255.0f), MIN(data->color[2] * 255.0f, 255)));
@@ -228,6 +210,7 @@ void			loop(t_data *data, t_window window)
 		mlx_do_sync(window.mlx_ptr);
 		// data->scene.view.y += .05;
 		// sleep(42);
+		dprintf(1, "DONE\n");
 	}
 }
 

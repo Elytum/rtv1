@@ -51,14 +51,9 @@ typedef struct	s_cylinder_finite
 
 typedef struct	s_cone
 {
-	float		x1;
-	float		y1;
-	float		z1;
-	float		r1;
-	float		x2;
-	float		y2;
-	float		z2;
-	float		r2;
+	t_vec3		origin;
+	t_vec3		dir;
+	float		angle;
 	int			m;
 }				t_cone;
 

@@ -8,10 +8,10 @@ void	describe_cones(t_scene scene)
 	i = 0;
 	while (i < scene.cones_nb)
 	{
-		printf("\t(%f, %f, %f) %f (%f, %f, %f) %f %i\n",
-				scene.cones[i].x1, scene.cones[i].y1, scene.cones[i].z1,
-				scene.cones[i].r1, scene.cones[i].x2, scene.cones[i].y2,
-				scene.cones[i].z2, scene.cones[i].r2, scene.cones[i].m);
+		printf("\t(%f, %f, %f) (%f, %f, %f) %f %i\n",
+				scene.cones[i].origin.x, scene.cones[i].origin.y, scene.cones[i].origin.z,
+				scene.cones[i].dir.x, scene.cones[i].dir.y, scene.cones[i].dir.z,
+				scene.cones[i].angle, scene.cones[i].m);
 		++i;
 	}
 }
