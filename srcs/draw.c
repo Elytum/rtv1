@@ -117,6 +117,7 @@ int				get_color(t_data *data, int x, int y)
 				// 	printf("Second\n");
 				// Add it's color
 				float lambert = vec3_dot(data->lightray.dir, data->normal) * data->coef;
+				lambert = exp(lambert) * pow(lambert, 50) + lambert;
 				data->color[0] += lambert * current.r * data->material.r;
 				data->color[1] += lambert * current.g * data->material.g;
 				data->color[2] += lambert * current.b * data->material.b;
@@ -127,6 +128,20 @@ int				get_color(t_data *data, int x, int y)
 		float reflet = 2.0f * vec3_dot(data->viewray.dir, data->normal);
 		data->viewray.start = data->new_start;
 		data->viewray.dir = vec3_sub(data->viewray.dir, vec3_mult(data->normal, reflet));
+		// if (vec3_dot(vec3_mult(data->normal, reflet), vec3_mult(data->normal, reflet)) > 5)
+		// {
+			// data->color[0] += vec3_dot(vec3_mult(data->normal, reflet), vec3_mult(data->normal, reflet)) / 30;
+			// data->color[1] += vec3_dot(vec3_mult(data->normal, reflet), vec3_mult(data->normal, reflet)) / 30;
+			// data->color[2] += vec3_dot(vec3_mult(data->normal, reflet), vec3_mult(data->normal, reflet)) / 30;
+		// double v = vec3_dot(vec3_mult(data->normal, reflet), vec3_mult(data->normal, reflet));
+		// dprintf(1, "%f\n", v);
+		// if (v > 2)
+		// {
+		// 	data->color[0] += exp(v);
+		// 	data->color[1] += exp(v);
+		// 	data->color[2] += exp(v);
+		// }
+		// }
 		++data->level;
 	}
 	return (rgb_color(MIN(data->color[0] * 255.0f, 255.0f), MIN(data->color[1] * 255.0f, 255.0f), MIN(data->color[2] * 255.0f, 255)));
