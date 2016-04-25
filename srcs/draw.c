@@ -84,6 +84,7 @@ int				get_color(t_data *data, int x, int y)
 // data->color[1] += data->material.g;
 // data->color[2] += data->material.b;
 
+float reflet = 2.0f * vec3_dot(data->viewray.dir, data->normal);
 		// Else, handle it's color
 		i = 0;
 		// For every lights in the scene
@@ -113,15 +114,39 @@ int				get_color(t_data *data, int x, int y)
 			{
 				// Add it's color
 				float lambert = vec3_dot(data->lightray.dir, data->normal) * data->coef;
-				lambert = exp(lambert) * pow(lambert, 50) + lambert;
 				data->color[0] += lambert * current.r * data->material.r;
 				data->color[1] += lambert * current.g * data->material.g;
 				data->color[2] += lambert * current.b * data->material.b;
+
+				t_vec3 R = vec3_sub(data->lightray.dir, vec3_mult(data->normal, 2 * vec3_dot(data->lightray.dir, data->normal)));
+				float dot = vec3_dot(data->viewray.dir, R);
+				if (dot > 0)
+				{
+					float ratio = 1 * pow(dot, 20);
+					data->color[0] += ratio * current.r;
+					data->color[1] += ratio * current.g;
+					data->color[2] += ratio * current.b;
+				}
+				// // t_vec3 phong_dir = vec3_sub(data->lightray.dir, vec3_mult(data->normal, reflet));
+				// t_vec3 phong_dir = vec3_sub(vec3_mult(data->normal, reflet), data->lightray.dir);
+				// float phong_term = MAX(vec3_dot(phong_dir, data->viewray.dir), 0.0f);
+				// phong_term = /**/.5 * pow(phong_term, /**/1) * data->coef;
+				// data->color[0] += phong_term * current.r;
+				// data->color[1] += phong_term * current.g;
+				// data->color[2] += phong_term * current.b;
 			}
 			++i;
 		}
 		data->coef *= data->material.c;
-		float reflet = 2.0f * vec3_dot(data->viewray.dir, data->normal);
+		// float reflet = 2.0f * vec3_dot(data->viewray.dir, data->normal);
+				// float reflet = 2.0f * vec3_dot(data->viewray.dir, data->normal);
+				// t_vec3 phong_dir = vec3_sub(data->lightray.dir, vec3_mult(data->normal, reflet));
+				// float phong_term = MAX(vec3_dot(phong_dir, data->viewray.dir), 0.0f);
+				// phong_term = /**/1 * pow(phong_term, /**/1) * data->coef;
+				// data->color[0] += phong_term * current.r * data->material.r;
+				// data->color[1] += phong_term * current.g * data->material.g;
+				// data->color[2] += phong_term * current.b * data->material.b;
+		data->viewray.start = data->new_start;
 		data->viewray.start = data->new_start;
 		data->viewray.dir = vec3_sub(data->viewray.dir, vec3_mult(data->normal, reflet));
 		++data->level;
