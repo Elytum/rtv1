@@ -22,11 +22,11 @@ void	create_header(int fd)
 	h.view = vec3_norm(vec3_new(0, 0, 1));
 	h.materials_nb = 5;
 	h.lights_nb = 2;
-	h.planes_nb = 0;//3;
-	h.spheres_nb = 0;//9;
-	h.cylinders_nb = 0;//4;
+	h.planes_nb = 3;
+	h.spheres_nb = 9;
+	h.cylinders_nb = 4;
 	h.cylinders_finite_nb = 0;
-	h.cones_nb = 1;
+	h.cones_nb = 0;
 	write(fd, &h, sizeof(h));
 }
 
@@ -63,7 +63,7 @@ void	create_materials(int fd)
 	add_element(fd, &m, sizeof(m));
 
 	/* Centered sphere */
-	m.c = 1;
+	m.c = 0;
 	m.r = .75;
 	m.g = 0;
 	m.b = 0;
@@ -78,12 +78,12 @@ void	create_lights(int fd)
 	l.pos.y = -25;
 	l.pos.z = -85;
 	l.r = 1.0;
-	l.g = 1.0;
-	l.b = 1.0;
+	l.g = 0.8;
+	l.b = 0.7;
 	add_element(fd, &l, sizeof(l));
-	l.pos.x = 0;
-	l.pos.y = 0;
-	l.pos.z = -1000;
+	l.pos.x = 110.0;
+	l.pos.y = -25;
+	l.pos.z = -85;
 	l.r = 0.6;
 	l.g = 0.7;
 	l.b = 1.0;
@@ -244,16 +244,7 @@ void	create_cylinders_finite(int fd)
 
 void	create_cones(int fd)
 {
-	t_cone	s;
-
-	/* First */
-	s.dir = vec3_norm(vec3_new(1, 1, 2));
-	s.m = 4;
-	s.origin.x = 0;
-	s.origin.y = 0;
-	s.origin.z = 0;
-	s.angle = 10;
-	add_element(fd, &s, sizeof(s));
+	(void)fd;
 }
 
 void	create_sceen(int fd)
@@ -261,11 +252,11 @@ void	create_sceen(int fd)
 	create_header(fd);
 	create_materials(fd);
 	create_lights(fd);
-	// create_planes(fd);
-	// create_spheres(fd);
-	// create_cylinders(fd);
+	create_planes(fd);
+	create_spheres(fd);
+	create_cylinders(fd);
 	// create_cylinders_finite(fd);
-	create_cones(fd);
+	// create_cones(fd);
 }
 
 int		main(int ac, char **av)

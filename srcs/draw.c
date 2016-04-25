@@ -62,7 +62,7 @@ void			init_data(t_data *data, int x, int y)
 	target = vec3_rotz(target, data->scene.view.z - 1);
 	data->viewray.dir = vec3_norm(target);//vec3_norm(vec3_new(fmod(target.x + data->scene.view.x, 3.14), fmod(target.y + data->scene.view.y, 3.14), target.z));
 }
-
+#define MAX(a,b) ((a) > (b) ? (a) : (b)) 
 int				get_color(t_data *data, int x, int y)
 {
 	unsigned int	i;

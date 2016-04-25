@@ -50,13 +50,13 @@ int				hit_cone(const t_ray ray, const t_cone cone, double *t)
 	// (void)cone;
 	// (void)t;
 	
-	float			a;
-	float			b;
-	float			c;
-	float			delta;
-	float			dist1;
-	float			dist2;
-	float			alpha;
+	double			a;
+	double			b;
+	double			c;
+	double			delta;
+	double			dist1;
+	double			dist2;
+	double			alpha;
 	t_vec3			tmp1;
 	t_vec3			origin;
 	t_vec3			tmp2;
@@ -84,6 +84,7 @@ int				hit_cone(const t_ray ray, const t_cone cone, double *t)
 	{
 		dist1 = (b * -1.0 + sqrt(delta)) / (2.0 * a);
 		dist2 = (b * -1.0 - sqrt(delta)) / (2.0 * a);
+		// printf("%f: %f %f vs %f\n", delta, dist1, dist2, *t);
 		if (dist1 < 0.1 && dist2 < 0.1)
 			return (0);
 		else if (dist1 >= 0.1 && dist2 >= 0.1 && dist1 > dist2)
