@@ -8,8 +8,8 @@ int				hit_cylinder(const t_ray ray, const t_cylinder cylinder, double *t)
 	float			b;
 	float			c;
 	float			delta;
-	float			dist1;
-	float			dist2;
+	// float			dist1;
+	// float			dist2;
 	t_vec3			tmp1;
 	t_vec3			origin;
 	t_vec3			tmp2;
@@ -20,19 +20,46 @@ int				hit_cylinder(const t_ray ray, const t_cylinder cylinder, double *t)
 	a = vec3_dot(tmp1, tmp1);
 	b = 2 * vec3_dot(tmp1, tmp2);
 	c = vec3_dot(tmp2, tmp2) - cylinder.r * cylinder.r;
-	if ((delta = b * b - (4 * a * c)) < 0)
+
+	// if ((delta = b * b - (4 * a * c)) < 0)
+	// 	return (0);
+	// else
+	// {
+	// 	dist1 = (b * -1.0 + sqrt(delta)) / (2.0 * a);
+	// 	dist2 = (b * -1.0 - sqrt(delta)) / (2.0 * a);
+	// 	if (dist1 < 0.1 && dist2 < 0.1)
+	// 		return (0);
+	// 	else if (dist1 >= 0.1 && dist2 >= 0.1)
+	// 		dist1 = dist2;
+	// 	if (dist1 >= 0.1 && dist1 < *t)
+	// 	{
+	// 		*t = dist1;
+	// 		return (1);
+	// 	}
+	// }
+	// return (0);
+	delta = b * b - 4 * a * c;
+	if (delta < 0)
 		return (0);
+	else if (delta == 0)
+	{
+		if (*t > b && b > 0)
+		{
+			*t = b;
+			return (1);
+		}
+	}
 	else
 	{
-		dist1 = (b * -1.0 + sqrt(delta)) / (2.0 * a);
-		dist2 = (b * -1.0 - sqrt(delta)) / (2.0 * a);
-		if (dist1 < 0.1 && dist2 < 0.1)
-			return (0);
-		else if (dist1 >= 0.1 && dist2 >= 0.1)
-			dist1 = dist2;
-		if (dist1 >= 0.1 && dist1 < *t)
+		double x0, x1;
+		double q = (b > 0) ? -.5 * (b + sqrt(delta)) : -.5 * (b + sqrt(delta));
+		x0 = q / a;
+		x1 = c / q;
+		if (x0 > x1)
+			x0 = x1;
+		if (*t > x0 && x0 > 0)
 		{
-			*t = dist1;
+			*t = x0;
 			return (1);
 		}
 	}

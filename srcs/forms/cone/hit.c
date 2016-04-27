@@ -54,8 +54,8 @@ int				hit_cone(const t_ray ray, const t_cone cone, double *t)
 	double			b;
 	double			c;
 	double			delta;
-	double			dist1;
-	double			dist2;
+	// double			dist1;
+	// double			dist2;
 	double			alpha;
 	t_vec3			tmp1;
 	t_vec3			origin;
@@ -78,21 +78,47 @@ int				hit_cone(const t_ray ray, const t_cone cone, double *t)
 	c = pow(cos(alpha), 2) * vec3_dot(tmp2, tmp2) - pow(sin(alpha), 2) * pow(vec3_dot(origin, cone.dir), 2);
 	// c = (pow(cos(alpha), 2) * dot_product(tmp2, tmp2)) - (pow(sin(alpha), 2) * carre(dot_product(origin, cone->axe)));
 			// dprintf(1, "%f", b * b - (4 * a * c));
-	if ((delta = b * b - (4 * a * c)) < 0)
+	// if ((delta = b * b - (4 * a * c)) < 0)
+	// 	return (0);
+	// else
+	// {
+	// 	dist1 = (b * -1.0 + sqrt(delta)) / (2.0 * a);
+	// 	dist2 = (b * -1.0 - sqrt(delta)) / (2.0 * a);
+	// 	// printf("%f: %f %f vs %f\n", delta, dist1, dist2, *t);
+	// 	if (dist1 < 0.1 && dist2 < 0.1)
+	// 		return (0);
+	// 	else if (dist1 >= 0.1 && dist2 >= 0.1 && dist1 > dist2)
+	// 		dist1 = dist2;
+	// 	if (dist1 >= 0.1 && dist1 < *t)
+	// 	{
+	// 		*t = dist1;
+	// 		// dprintf(1, "Hit with dist %f\n", *t);
+	// 		return (1);
+	// 	}
+	// }
+	// return (0);
+	delta = b * b - 4 * a * c;
+	if (delta < 0)
 		return (0);
+	else if (delta == 0)
+	{
+		if (*t > b && b > 0)
+		{
+			*t = b;
+			return (1);
+		}
+	}
 	else
 	{
-		dist1 = (b * -1.0 + sqrt(delta)) / (2.0 * a);
-		dist2 = (b * -1.0 - sqrt(delta)) / (2.0 * a);
-		// printf("%f: %f %f vs %f\n", delta, dist1, dist2, *t);
-		if (dist1 < 0.1 && dist2 < 0.1)
-			return (0);
-		else if (dist1 >= 0.1 && dist2 >= 0.1 && dist1 > dist2)
-			dist1 = dist2;
-		if (dist1 >= 0.1 && dist1 < *t)
+		double x0, x1;
+		double q = (b > 0) ? -.5 * (b + sqrt(delta)) : -.5 * (b + sqrt(delta));
+		x0 = q / a;
+		x1 = c / q;
+		if (x0 > x1)
+			x0 = x1;
+		if (*t > x0 && x0 > 0)
 		{
-			*t = dist1;
-			// dprintf(1, "Hit with dist %f\n", *t);
+			*t = x0;
 			return (1);
 		}
 	}

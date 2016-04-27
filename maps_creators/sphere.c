@@ -17,16 +17,16 @@ void	create_header(int fd)
 	t_header	h;
 
 	h.camera_x = 0.0;
-	h.camera_y = 100.0;
-	h.camera_z = -1.0;
+	h.camera_y = 0.0;
+	h.camera_z = -10.0;
 	h.view = vec3_norm(vec3_new(0, 0, 1));
-	h.materials_nb = 2;
+	h.materials_nb = 1;
 	h.lights_nb = 1;
-	h.planes_nb = 0;//1;
-	h.spheres_nb = 0;
+	h.planes_nb = 0;
+	h.spheres_nb = 1;
 	h.cylinders_nb = 0;
 	h.cylinders_finite_nb = 0;
-	h.cones_nb = 1;
+	h.cones_nb = 0;
 	write(fd, &h, sizeof(h));
 }
 
@@ -34,18 +34,11 @@ void	create_materials(int fd)
 {
 	t_material	m;
 
-	/* Cylinder */
-	m.c = 0;
+	/* Sphere */
+	m.c = 1;
 	m.r = 1;
-	m.g = 1;
-	m.b = 0;
-	add_element(fd, &m, sizeof(m));
-
-	/* Plan */
-	m.c = 0;
-	m.r = 0;
 	m.g = 0;
-	m.b = 1;
+	m.b = 0;
 	add_element(fd, &m, sizeof(m));
 }
 
@@ -53,31 +46,31 @@ void	create_lights(int fd)
 {
 	t_light		l;
 
-	l.pos.x = 2000.0;
+	l.pos.x = 50.0;
 	l.pos.y = 0;
-	l.pos.z = -1000;
-	l.r = 1.0;
-	l.g = 1.0;
-	l.b = 1.0;
+	l.pos.z = -50;
+	l.r = .4;
+	l.g = .4;
+	l.b = .4;
 	add_element(fd, &l, sizeof(l));
 }
 
 void	create_planes(int fd)
 {
-	t_plane	s;
-
-	/* Plan */
-	s.m = 1;
-	s.normal = vec3_norm(vec3_new(0, 1, 0));
-	s.coord.x = 0.0;
-	s.coord.y = 1000000000.0;
-	s.coord.z = 10.0;
-	add_element(fd, &s, sizeof(s));
+	(void)fd;
 }
 
 void	create_spheres(int fd)
 {
-	(void)fd;
+	t_sphere	s;
+
+	/* Sphere */
+	s.m = 0;
+	s.r = 5;
+	s.center.x = 0;
+	s.center.y = 0;
+	s.center.z = 0;
+	add_element(fd, &s, sizeof(s));
 }
 
 void	create_cylinders(int fd)
@@ -92,16 +85,7 @@ void	create_cylinders_finite(int fd)
 
 void	create_cones(int fd)
 {
-	t_cone	s;
-
-	/* Cone */
-	s.dir = vec3_norm(vec3_new(0, 1, 1));
-	s.m = 0;
-	s.origin.x = 0;
-	s.origin.y = 100;
-	s.origin.z = 0;
-	s.angle = 40;
-	add_element(fd, &s, sizeof(s));
+	(void)fd;
 }
 
 void	create_sceen(int fd)
@@ -110,7 +94,7 @@ void	create_sceen(int fd)
 	create_materials(fd);
 	create_lights(fd);
 	// create_planes(fd);
-	// create_spheres(fd);
+	create_spheres(fd);
 	// create_cylinders(fd);
 	// create_cylinders_finite(fd);
 	create_cones(fd);

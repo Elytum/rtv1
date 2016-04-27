@@ -95,11 +95,11 @@ void	create_cones(int fd)
 	t_cone	s;
 
 	/* Cone */
-	s.dir = vec3_norm(vec3_new(0, 1, 1));
+	s.dir = vec3_norm(vec3_new(0, 1, .5));
 	s.m = 0;
 	s.origin.x = 0;
 	s.origin.y = 100;
-	s.origin.z = 0;
+	s.origin.z = 1;
 	s.angle = 40;
 	add_element(fd, &s, sizeof(s));
 }
