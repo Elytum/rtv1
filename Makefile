@@ -62,8 +62,6 @@ INC += $(shell for form in $(FORMS) ; do echo '-I srcs/forms/'$$form ; done)
 .PHONY: MLX MLX_RE $(NAME) clean fclean re create describe draw
 
 all: $(NAME) draw create describe
-	echo $(FORMS_FILES)
-	echo $(FORMS_INC)
 
 MLX:
 	make -C minilibx_macos

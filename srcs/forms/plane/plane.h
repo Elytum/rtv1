@@ -18,9 +18,18 @@
 
 typedef struct s_data	t_data;
 
-int		hit_plane(const t_ray ray, const t_plane sphere, double *t);
-void	find_closest_plane(t_data *data, const t_ray ray, double *t);
-int		hit_any_plane(t_data *data, const t_ray ray, double t);
-int		plane_normal(t_data *data);
+typedef struct			s_plane
+{
+	t_vec3				normal;
+	t_vec3				coord;
+	int					m;
+}						t_plane;
+
+int						hit_plane(const t_ray ray, const t_plane sphere,
+							double *t);
+void					find_closest_plane(t_data *data, const t_ray ray,
+							double *t);
+int						hit_any_plane(t_data *data, const t_ray ray, double t);
+int						plane_normal(t_data *data);
 
 #endif

@@ -18,9 +18,18 @@
 
 typedef struct s_data	t_data;
 
-int		hit_sphere(const t_ray ray, const t_sphere sphere, double *t);
-int		sphere_normal(t_data *data);
-void	find_closest_sphere(t_data *data, const t_ray ray, double *t);
-int		hit_any_sphere(t_data *data, const t_ray ray, double t);
+typedef struct			s_sphere
+{
+	t_vec3				center;
+	double				r;
+	int					m;
+}						t_sphere;
+
+int						hit_sphere(const t_ray ray, const t_sphere sphere,
+							double *t);
+int						sphere_normal(t_data *data);
+void					find_closest_sphere(t_data *data, const t_ray ray,
+							double *t);
+int						hit_any_sphere(t_data *data, const t_ray ray, double t);
 
 #endif

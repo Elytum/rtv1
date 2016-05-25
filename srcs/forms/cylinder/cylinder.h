@@ -18,9 +18,20 @@
 
 typedef struct s_data	t_data;
 
-int		hit_cylinder(const t_ray ray, const t_cylinder cylinder, double *t);
-void	find_closest_cylinder(t_data *data, const t_ray ray, double *t);
-int		hit_any_cylinder(t_data *data, const t_ray ray, double t);
-int		cylinder_normal(t_data *data);
+typedef struct			s_cylinder
+{
+	t_vec3				origin;
+	t_vec3				dir;
+	float				r;
+	int					m;
+}						t_cylinder;
+
+int						hit_cylinder(const t_ray ray, const t_cylinder cylinder,
+								double *t);
+void					find_closest_cylinder(t_data *data, const t_ray ray,
+								double *t);
+int						hit_any_cylinder(t_data *data, const t_ray ray,
+								double t);
+int						cylinder_normal(t_data *data);
 
 #endif
