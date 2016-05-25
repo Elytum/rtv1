@@ -78,8 +78,8 @@ void	create_lights(int fd)
 	l.pos.y = -25;
 	l.pos.z = -85;
 	l.r = 1.0;
-	l.g = 0.8;
-	l.b = 0.7;
+	l.g = 1.0;
+	l.b = 1.0;
 	add_element(fd, &l, sizeof(l));
 	l.pos.x = 110.0;
 	l.pos.y = -25;
@@ -244,7 +244,16 @@ void	create_cylinders_finite(int fd)
 
 void	create_cones(int fd)
 {
-	(void)fd;
+	t_cone	s;
+
+	/* First */
+	s.dir = vec3_norm(vec3_new(0, 1, 0));
+	s.m = 3;
+	s.origin.x = -60;
+	s.origin.y = 0;
+	s.origin.z = -25;
+	s.angle = 42;
+	add_element(fd, &s, sizeof(s));
 }
 
 void	create_sceen(int fd)

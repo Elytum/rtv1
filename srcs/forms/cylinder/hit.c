@@ -39,11 +39,11 @@ int				hit_cylinder(const t_ray ray, const t_cylinder cylinder, double *t)
 	// }
 	// return (0);
 	delta = b * b - 4 * a * c;
-	if (delta < 0)
+	if (delta < 0.1)
 		return (0);
 	else if (delta == 0)
 	{
-		if (*t > b && b > 0)
+		if (*t > b && b > 0.1)
 		{
 			*t = b;
 			return (1);
@@ -52,12 +52,12 @@ int				hit_cylinder(const t_ray ray, const t_cylinder cylinder, double *t)
 	else
 	{
 		double x0, x1;
-		double q = (b > 0) ? -.5 * (b + sqrt(delta)) : -.5 * (b + sqrt(delta));
+		double q = (b > 0.1) ? -.5 * (b + sqrt(delta)) : -.5 * (b + sqrt(delta));
 		x0 = q / a;
 		x1 = c / q;
 		if (x0 > x1)
 			x0 = x1;
-		if (*t > x0 && x0 > 0)
+		if (*t > x0 && x0 > 0.1)
 		{
 			*t = x0;
 			return (1);

@@ -45,64 +45,30 @@ static t_vec	*rt_cone(t_ray ray, t_cone *cone, float *distance)
 */
 int				hit_cone(const t_ray ray, const t_cone cone, double *t)
 {
-	// return (0);
-	// (void)ray;
-	// (void)cone;
-	// (void)t;
-	
 	double			a;
 	double			b;
 	double			c;
 	double			delta;
-	// double			dist1;
-	// double			dist2;
 	double			alpha;
 	t_vec3			tmp1;
 	t_vec3			origin;
 	t_vec3			tmp2;
-	// t_vec3			raydir;
 
-	// dprintf(1, "Test hit\n");
 	alpha = cone.angle / 180 * M_PI;
-	// alpha = cone->angle / 180 * M_PI;
 	origin = vec3_sub(ray.start, cone.origin);
-	// origin = sous_vectors(ray.start, cone->pos);
 	tmp1 = vec3_sub(ray.dir, vec3_mult(cone.dir, vec3_dot(ray.dir, cone.dir)));
-	// tmp1 = sous_vectors(ray.dir, mult_vector(cone->axe, dot_product(ray.dir, cone->axe)));
 	tmp2 = vec3_sub(origin, vec3_mult(cone.dir, vec3_dot(origin, cone.dir)));
-	// tmp2 = sous_vectors(origin, mult_vector(cone->axe, dot_product(origin, cone->axe)));
 	a = pow(cos(alpha), 2) * vec3_dot(tmp1, tmp1) - pow(sin(alpha), 2) * pow(vec3_dot(ray.dir, cone.dir), 2);
-	// a = (pow(cos(alpha), 2) * dot_product(tmp1, tmp1)) - (pow(sin(alpha), 2) * carre(dot_product(ray.dir, cone->axe)));
 	b = 2 * (pow(cos(alpha), 2) * vec3_dot(tmp1, tmp2)) - 2 * (pow(sin(alpha), 2) * vec3_dot(ray.dir, cone.dir) * vec3_dot(origin, cone.dir));
-	// b = 2 * (pow(cos(alpha), 2) * dot_product(tmp1, tmp2)) - 2 * (pow(sin(alpha), 2) * dot_product(ray.dir, cone->axe) * dot_product(origin, cone->axe));
 	c = pow(cos(alpha), 2) * vec3_dot(tmp2, tmp2) - pow(sin(alpha), 2) * pow(vec3_dot(origin, cone.dir), 2);
-	// c = (pow(cos(alpha), 2) * dot_product(tmp2, tmp2)) - (pow(sin(alpha), 2) * carre(dot_product(origin, cone->axe)));
-			// dprintf(1, "%f", b * b - (4 * a * c));
-	// if ((delta = b * b - (4 * a * c)) < 0)
-	// 	return (0);
-	// else
-	// {
-	// 	dist1 = (b * -1.0 + sqrt(delta)) / (2.0 * a);
-	// 	dist2 = (b * -1.0 - sqrt(delta)) / (2.0 * a);
-	// 	// printf("%f: %f %f vs %f\n", delta, dist1, dist2, *t);
-	// 	if (dist1 < 0.1 && dist2 < 0.1)
-	// 		return (0);
-	// 	else if (dist1 >= 0.1 && dist2 >= 0.1 && dist1 > dist2)
-	// 		dist1 = dist2;
-	// 	if (dist1 >= 0.1 && dist1 < *t)
-	// 	{
-	// 		*t = dist1;
-	// 		// dprintf(1, "Hit with dist %f\n", *t);
-	// 		return (1);
-	// 	}
-	// }
-	// return (0);
+
 	delta = b * b - 4 * a * c;
+
 	if (delta < 0)
 		return (0);
 	else if (delta == 0)
 	{
-		if (*t > b && b > 0)
+		if (*t > b && b > 0.1)
 		{
 			*t = b;
 			return (1);
@@ -116,7 +82,7 @@ int				hit_cone(const t_ray ray, const t_cone cone, double *t)
 		x1 = c / q;
 		if (x0 > x1)
 			x0 = x1;
-		if (*t > x0 && x0 > 0)
+		if (*t > x0 && x0 > 0.1)
 		{
 			*t = x0;
 			return (1);
