@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-void	*safe_malloc(size_t size)
+void			*safe_malloc(size_t size)
 {
 	const char	error[] = "Malloc error\n";
 	void		*ret;

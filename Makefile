@@ -24,7 +24,6 @@ FILES	=	scene.c						\
 			vec/vec3.c					\
 			vec/vec3_1.c				\
 			vec/vec3_2.c				\
-			ray/ray.c					\
 			forms/hit.c
 
 DRAW_FILES		=	draw.c draw/raytrace.c draw/tools.c
