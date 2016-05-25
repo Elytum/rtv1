@@ -8,24 +8,24 @@
 #include <float.h>
 
 
-int				find_normal(const t_ray viewray, const float t,
-							t_vec3 *new_start, t_vec3 *n, t_vec3 center)
-{
-	float		temp;
+// int				find_normal(const t_ray viewray, const float t,
+// 							t_vec3 *new_start, t_vec3 *n, t_vec3 center)
+// {
+// 	float		temp;
 
-	*new_start = vec3_add(viewray.start, vec3_mult(viewray.dir, t));
-	*n = vec3_sub(*new_start, center);
-	temp = vec3_dot(*n, *n);
-	if (temp == 0.0f)
-		return (0);
-	*n = vec3_mult(*n, 1.0f / sqrt(temp));
-	return (1);
-}
+// 	*new_start = vec3_add(viewray.start, vec3_mult(viewray.dir, t));
+// 	*n = vec3_sub(*new_start, center);
+// 	temp = vec3_dot(*n, *n);
+// 	if (temp == 0.0f)
+// 		return (0);
+// 	*n = vec3_mult(*n, 1.0f / sqrt(temp));
+// 	return (1);
+// }
 
-int				rgb_color(int r, int g, int b)
-{
-	return ((r << 16) + (g << 8) + b);
-}
+// int				rgb_color(int r, int g, int b)
+// {
+// 	return ((r << 16) + (g << 8) + b);
+// }
 
 void			init_data(t_data *data, int x, int y)
 {

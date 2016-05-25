@@ -85,6 +85,9 @@ typedef struct	s_window
 
 void					raytrace(t_data *data, t_window window);
 int						get_color(t_data *data, int x, int y);
+int						find_normal(const t_ray viewray, const float t,
+							t_vec3 *new_start, t_vec3 *n, t_vec3 center);
+int						rgb_color(int r, int g, int b);
 void					init_scene(int fd, t_scene *scene);
 void					delete_scene(t_scene scene);
 void					describe_materials(t_scene scene);
