@@ -19,6 +19,25 @@
 #include <forms.h>
 #include <float.h>
 
+void			init_data(t_data *data, int x, int y)
+{
+	t_vec3		target = vec3_norm(vec3_new(x - WIDTH / 2,
+					y - HEIGHT / 2, - (WIDTH / 2 * tan(30 / 2))));
+
+	data->color[0] = 0;
+	data->color[1] = 0;
+	data->color[2] = 0;
+	data->coef = 1.0f;
+	data->level = 0;
+	data->once = 1;
+	data->viewray.start = vec3_new(data->scene.camera_x,
+					data->scene.camera_y, data->scene.camera_z);
+	target = vec3_rotx(target, data->scene.view.x);
+	target = vec3_roty(target, data->scene.view.y);
+	target = vec3_rotz(target, data->scene.view.z - 1);
+	data->viewray.dir = vec3_norm(target);
+}	
+
 int				find_normal(const t_ray viewray, const float t,
 							t_vec3 *new_start, t_vec3 *n, t_vec3 center)
 {

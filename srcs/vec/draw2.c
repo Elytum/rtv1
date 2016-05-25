@@ -25,8 +25,7 @@ void			draw_scene(t_data *data)
 
 	if ((window.mlx_ptr = mlx_init()) == NULL)
 		return ;
-	if ((window.mlx_win = mlx_new_window(window.mlx_ptr,
-			WIDTH, HEIGHT, NAME)) == NULL)
+	if ((window.mlx_win = mlx_new_window(window.mlx_ptr, WIDTH, HEIGHT, NAME)) == NULL)
 		return ;
 	window.img = mlx_new_image(window.mlx_ptr, WIDTH, HEIGHT);
 	window.data = mlx_get_data_addr(window.img, &(window.bpp),
@@ -35,14 +34,7 @@ void			draw_scene(t_data *data)
 	mlx_destroy_window(window.mlx_ptr, window.mlx_win);
 }
 
-int				stop(t_data *data)
-{
-	delete_scene(data->scene);
-	free(data);
-	return (0);
-}
-
-int				main(int ac, char **av)
+int		main(int ac, char **av)
 {
 	t_data		*data;
 	int			fd;
@@ -68,5 +60,7 @@ int				main(int ac, char **av)
 	if (VERBOSE)
 		describe_scene(data->scene);
 	draw_scene(data);
-	return (stop(data));
+	delete_scene(data->scene);
+	free(data);
+	return (0);
 }
