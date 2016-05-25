@@ -28,7 +28,6 @@ typedef struct			s_header
 	unsigned int		planes_nb;
 	unsigned int		spheres_nb;
 	unsigned int		cylinders_nb;
-	unsigned int		cylinders_finite_nb;
 	unsigned int		cones_nb;
 }						t_header;
 
@@ -43,14 +42,12 @@ typedef struct			s_scene
 	t_plane				*planes;
 	t_sphere			*spheres;
 	t_cylinder			*cylinders;
-	t_cylinder_finite	*cylinders_finite;
 	t_cone				*cones;
 	unsigned int		materials_nb;
 	unsigned int		lights_nb;
 	unsigned int		planes_nb;
 	unsigned int		spheres_nb;
 	unsigned int		cylinders_nb;
-	unsigned int		cylinders_finite_nb;
 	unsigned int		cones_nb;
 }						t_scene;
 
