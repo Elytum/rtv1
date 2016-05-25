@@ -18,13 +18,13 @@ void	create_header(int fd)
 
 	h.camera_x = 0.0;
 	h.camera_y = 0.0;
-	h.camera_z = -105.0;
+	h.camera_z = -10.0;
 	h.view = vec3_norm(vec3_new(0, 0, 1));
-	h.materials_nb = 5;
-	h.lights_nb = 2;
-	h.planes_nb = 3;
-	h.spheres_nb = 9;
-	h.cylinders_nb = 4;
+	h.materials_nb = 4;
+	h.lights_nb = 1;
+	h.planes_nb = 0;
+	h.spheres_nb = 5;
+	h.cylinders_nb = 0;
 	h.cylinders_finite_nb = 0;
 	h.cones_nb = 0;
 	write(fd, &h, sizeof(h));
@@ -34,39 +34,32 @@ void	create_materials(int fd)
 {
 	t_material	m;
 
-	/* Back Wall */
-	m.c = 0;
-	m.r = .3;
-	m.g = .3;
-	m.b = 1.0;
-	add_element(fd, &m, sizeof(m));
-
-	/* Top Wall */
-	m.c = 0;
-	m.r = .175;
-	m.g = .175;
-	m.b = .175;
-	add_element(fd, &m, sizeof(m));
-
-	/* Bottom Wall */
-	m.c = 0;
-	m.r = .65;
-	m.g = .65;
-	m.b = .65;
-	add_element(fd, &m, sizeof(m));
-
-	/* Cylinders and balls */
-	m.c = .1;
-	m.r = .75;
-	m.g = .75;
-	m.b = .75;
-	add_element(fd, &m, sizeof(m));
-
-	/* Centered sphere */
-	m.c = 0;
-	m.r = .75;
+	/* RED */
+	m.c = 1;
+	m.r = 1;
 	m.g = 0;
 	m.b = 0;
+	add_element(fd, &m, sizeof(m));
+
+	/* BLACK */
+	m.c = 1;
+	m.r = 0;
+	m.g = 0;
+	m.b = 0;
+	add_element(fd, &m, sizeof(m));
+
+	/* WHITE */
+	m.c = 1;
+	m.r = 1;
+	m.g = 1;
+	m.b = 1;
+	add_element(fd, &m, sizeof(m));
+
+	/* WHITE NO REFLECT */
+	m.c = 0;
+	m.r = 1;
+	m.g = 1;
+	m.b = 1;
 	add_element(fd, &m, sizeof(m));
 }
 
@@ -74,167 +67,73 @@ void	create_lights(int fd)
 {
 	t_light		l;
 
-	l.pos.x = -110.0;
+	l.pos.x = 100;
 	l.pos.y = -25;
-	l.pos.z = -85;
+	l.pos.z = -100;
 	l.r = 1.0;
-	l.g = 0.8;
-	l.b = 0.7;
-	add_element(fd, &l, sizeof(l));
-	l.pos.x = 110.0;
-	l.pos.y = -25;
-	l.pos.z = -85;
-	l.r = 0.6;
-	l.g = 0.7;
+	l.g = 1.0;
 	l.b = 1.0;
 	add_element(fd, &l, sizeof(l));
 }
 
 void	create_planes(int fd)
 {
-	t_plane	s;
+	(void)fd;
+	// t_plane	s;
 
-	/* Back wall */
-	s.m = 0;
-	s.normal = vec3_norm(vec3_new(0, 0, 1));
-	s.coord.x = 0.0;
-	s.coord.y = 0.0;
-	s.coord.z = 70.0;
-	add_element(fd, &s, sizeof(s));
-
-	/* Top wall */
-	s.m = 1;
-	s.normal = vec3_norm(vec3_new(0, 1, 0));
-	s.coord.x = 0.0;
-	s.coord.y = -50.0;
-	s.coord.z = 70.0;
-	add_element(fd, &s, sizeof(s));
-
-	/* Bottom wall */
-	s.m = 2;
-	s.normal = vec3_norm(vec3_new(0, 1, 0));
-	s.coord.x = 0.0;
-	s.coord.y = 50.0;
-	s.coord.z = 70.0;
-	add_element(fd, &s, sizeof(s));
+	// /* Plan */
+	// s.m = 1;
+	// s.normal = vec3_norm(vec3_new(0, 1, 0));
+	// s.coord.x = 0.0;
+	// s.coord.y = 1000000000.0;
+	// s.coord.z = 10.0;
+	// add_element(fd, &s, sizeof(s));
 }
 
 void	create_spheres(int fd)
 {
 	t_sphere	s;
 
-	/* First top */
-	s.m = 3;
-	s.r = 20;
-	s.center.x = -60;
-	s.center.y = -50.0;
-	s.center.z = -25.0;
-	add_element(fd, &s, sizeof(s));
-
-	/* First bottom */
-	s.m = 3;
-	s.r = 20;
-	s.center.x = -60;
-	s.center.y = 50.0;
-	s.center.z = -25.0;
-	add_element(fd, &s, sizeof(s));
-
-	/* Second top */
-	s.m = 3;
-	s.r = 20;
-	s.center.x = -60;
-	s.center.y = -50.0;
-	s.center.z = 50;
-	add_element(fd, &s, sizeof(s));
-
-	/* Second bottom */
-	s.m = 3;
-	s.r = 20;
-	s.center.x = -60;
-	s.center.y = 50.0;
-	s.center.z = 50;
-	add_element(fd, &s, sizeof(s));
-
-	/* Third top */
-	s.m = 3;
-	s.r = 20;
-	s.center.x = 60;
-	s.center.y = -50.0;
-	s.center.z = 50;
-	add_element(fd, &s, sizeof(s));
-
-	/* Third bottom */
-	s.m = 3;
-	s.r = 20;
-	s.center.x = 60;
-	s.center.y = 50.0;
-	s.center.z = 50;
-	add_element(fd, &s, sizeof(s));
-
-	/* Fourth top */
-	s.m = 3;
-	s.r = 20;
-	s.center.x = 60;
-	s.center.y = -50.0;
-	s.center.z = -25.0;
-	add_element(fd, &s, sizeof(s));
-
-	/* Fourth bottom */
-	s.m = 3;
-	s.r = 20;
-	s.center.x = 60;
-	s.center.y = 50.0;
-	s.center.z = -25.0;
-	add_element(fd, &s, sizeof(s));
-
-	/* Centered */
-	s.m = 4;
-	s.r = 7;
+	/* Top */
+	s.m = 0;
+	s.r = 5;
 	s.center.x = 0;
-	s.center.y = 30;
-	s.center.z = -30;
+	s.center.y = -.25;
+	s.center.z = 0;
+	add_element(fd, &s, sizeof(s));
+	/* Bottom */
+	s.m = 2;
+	s.r = 5;
+	s.center.x = 0;
+	s.center.y = .25;
+	s.center.z = 0;
+	add_element(fd, &s, sizeof(s));
+	/* Center */
+	s.m = 1;
+	s.r = 5;
+	s.center.x = 0;
+	s.center.y = 0;
+	s.center.z = 0;
+	add_element(fd, &s, sizeof(s));
+	/* Middle */
+	s.m = 1;
+	s.r = 1;
+	s.center.x = 0;
+	s.center.y = 0;
+	s.center.z = -4.25;
+	add_element(fd, &s, sizeof(s));
+	/* Front */
+	s.m = 3;
+	s.r = .45;
+	s.center.x = 0;
+	s.center.y = 0;
+	s.center.z = -5;
 	add_element(fd, &s, sizeof(s));
 }
 
 void	create_cylinders(int fd)
 {
-	t_cylinder	s;
-
-	/* First */
-	s.dir = vec3_norm(vec3_new(0, 1, 0));
-	s.m = 3;
-	s.r = 10;
-	s.origin.x = -60;
-	s.origin.y = 0;
-	s.origin.z = -25;
-	add_element(fd, &s, sizeof(s));
-
-	/* Second */
-	s.dir = vec3_norm(vec3_new(0, 1, 0));
-	s.m = 3;
-	s.r = 10;
-	s.origin.x = -60;
-	s.origin.y = 0;
-	s.origin.z = 50;
-	add_element(fd, &s, sizeof(s));
-
-	/* Third */
-	s.dir = vec3_norm(vec3_new(0, 1, 0));
-	s.m = 3;
-	s.r = 10;
-	s.origin.x = 60;
-	s.origin.y = 0;
-	s.origin.z = 50;
-	add_element(fd, &s, sizeof(s));
-
-	/* Fourth */
-	s.dir = vec3_norm(vec3_new(0, 1, 0));
-	s.m = 3;
-	s.r = 10;
-	s.origin.x = 60;
-	s.origin.y = 0;
-	s.origin.z = -25;
-	add_element(fd, &s, sizeof(s));
+	(void)fd;
 }
 
 void	create_cylinders_finite(int fd)
@@ -244,7 +143,16 @@ void	create_cylinders_finite(int fd)
 
 void	create_cones(int fd)
 {
-	(void)fd;
+	t_cone	s;
+
+	/* Cone */
+	s.dir = vec3_norm(vec3_new(1, 0, 1));
+	s.m = 0;
+	s.origin.x = 0;
+	s.origin.y = 0;
+	s.origin.z = 0;
+	s.angle = 40;
+	add_element(fd, &s, sizeof(s));
 }
 
 void	create_sceen(int fd)
@@ -252,9 +160,9 @@ void	create_sceen(int fd)
 	create_header(fd);
 	create_materials(fd);
 	create_lights(fd);
-	create_planes(fd);
+	// create_planes(fd);
 	create_spheres(fd);
-	create_cylinders(fd);
+	// create_cylinders(fd);
 	// create_cylinders_finite(fd);
 	// create_cones(fd);
 }

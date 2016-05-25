@@ -70,7 +70,7 @@ int				get_color(t_data *data, int x, int y)
 	// Init data structure
 	init_data(data, x, y);
 	// As long as the ray can resbound
-	while (data->once || (data->coef > 0.0f && data->level < 1))
+	while (data->once || (data->coef > 0.0f && data->level < 2))
 	{
 		// We rememver we at least resbounded once
 		data->once = 0;
