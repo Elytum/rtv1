@@ -19,7 +19,7 @@
 #include <forms.h>
 #include <float.h>
 
-void				handle_lights(t_data *data, t_light current)
+static void			handle_lights(t_data *data, t_light current)
 {
 	double			lambert;
 	double			ratio;
@@ -42,23 +42,19 @@ void				handle_lights(t_data *data, t_light current)
 	}
 }
 
-void				iterate_lights(t_data *data)
+static void			iterate_lights(t_data *data)
 {
 	unsigned int	i;
+	t_light			current;
+	t_vec3			dist;
 
 	i = 0;
 	while (i < data->scene.lights_nb)
 	{
-		t_light		current = data->scene.lights[i];
-		t_vec3		dist = vec3_sub(current.pos, data->new_start);
-
-		if (vec3_dot(data->normal, dist) <= 0.0f)
-		{
-			++i;
-			continue ;
-		}
-		data->t = sqrt(vec3_dot(dist, dist));
-		if (data->t <= 0.0f)
+		current = data->scene.lights[i];
+		dist = vec3_sub(current.pos, data->new_start);
+		if (vec3_dot(data->normal, dist) <= 0.0f ||
+			(data->t = sqrt(vec3_dot(dist, dist))) <= 0.0f)
 		{
 			++i;
 			continue ;
@@ -104,20 +100,23 @@ void				raytrace(t_data *data, t_window window)
 	char			*ptr;
 	int				*cast;
 
-	ptr = window.data;
-	y = 0;
-	while (y < HEIGHT)
+	while (42)
 	{
-		x = 0;
-		while (x < WIDTH)
+		ptr = window.data;
+		y = 0;
+		while (y < HEIGHT)
 		{
-			color = get_color(data, x++, y);
-			cast = (int *)ptr;
-			*cast = color;
-			ptr += 4;
+			x = 0;
+			while (x < WIDTH)
+			{
+				color = get_color(data, x++, y);
+				cast = (int *)ptr;
+				*cast = color;
+				ptr += 4;
+			}
+			++y;
 		}
-		++y;
+		mlx_put_image_to_window(window.mlx_ptr, window.mlx_win, window.img, 0, 0);
+		mlx_do_sync(window.mlx_ptr);
 	}
-	mlx_put_image_to_window(window.mlx_ptr, window.mlx_win, window.img, 0, 0);
-	mlx_do_sync(window.mlx_ptr);
 }
