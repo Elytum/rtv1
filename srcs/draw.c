@@ -7,22 +7,6 @@
 #include <forms.h>
 #include <float.h>
 
-#define NAME "RTV1"
-#define WIDTH 640
-#define HEIGHT 480
-
-#define MIN(a, b) (((a) < (b)) ? (a) : (b))
-
-typedef struct	s_window
-{
-	void		*mlx_ptr;
-	void		*mlx_win;
-	void		*img;
-	char		*data;
-	int			bpp;
-	int			line_size;
-	int			endian;
-}				t_window;
 
 int				find_normal(const t_ray viewray, const float t,
 							t_vec3 *new_start, t_vec3 *n, t_vec3 center)
@@ -62,7 +46,7 @@ void			init_data(t_data *data, int x, int y)
 	target = vec3_rotz(target, data->scene.view.z - 1);
 	data->viewray.dir = vec3_norm(target);//vec3_norm(vec3_new(fmod(target.x + data->scene.view.x, 3.14), fmod(target.y + data->scene.view.y, 3.14), target.z));
 }
-#define MAX(a,b) ((a) > (b) ? (a) : (b)) 
+
 int				get_color(t_data *data, int x, int y)
 {
 	unsigned int	i;
@@ -143,90 +127,35 @@ double reflet = 2.0f * vec3_dot(data->viewray.dir, data->normal);
 	return (rgb_color(MIN(data->color[0] * 255.0f, 255.0f), MIN(data->color[1] * 255.0f, 255.0f), MIN(data->color[2] * 255.0f, 255)));
 }
 
-#define MAX_SQUARE 1
+// void			raytrace(t_data *data, t_window window)
+// {
+// 	int			x;
+// 	int			y;
+// 	int			color;
+// 	char		*ptr;
+// 	int			*cast;
 
-void			draw_square(t_window window, char *ptr, int size, int color)
-{
-	int			i;
-	int			j;
-	char		*next;
-	int			*cast;
-
-	i = 0;
-	while (i < size)
-	{
-		j = 0;
-		next = ptr + window.line_size;
-		cast = (int *)ptr;
-		while (j < size)
-		{
-			*cast++ = color;
-			++j;
-		}
-		ptr = next;
-		++i;
-	}
-}
-
-int				do_draw_square(int x, int y, int size)
-{
-	if (size == MAX_SQUARE || x % (size * 2) || y % (size * 2))
-		return (1);
-	return (0);
-}
-
-void			raytrace_huge(t_data *data, t_window window, int size)
-{
-	int			x;
-	int			y;
-	int			color;
-	char		*ptr;
-	const int	step = size * window.bpp / 8;
-
-	ptr = window.data;
-	y = 0;
-	while (y < HEIGHT)
-	{
-		x = 0;
-		while (x < WIDTH)
-		{
-			if (do_draw_square(x, y, size))
-			{
-				color = get_color(data, x, y);
-				draw_square(window, ptr, size, color);
-			}
-			x += size;
-			ptr += step;
-		}
-		y += size;
-		ptr += (size - 1) * (window.line_size);
-	}
-	mlx_put_image_to_window(window.mlx_ptr, window.mlx_win, window.img, 0, 0);
-}
-
-void			raytrace(t_data *data, t_window window)
-{
-	int		size;
-
-	size = MAX_SQUARE;
-	while (size)
-	{
-		raytrace_huge(data, window, size);
-		size /= 2;
-	}
-}
-
-void			loop(t_data *data, t_window window)
-{
-	while (42)
-	{
-		raytrace(data, window);
-		mlx_do_sync(window.mlx_ptr);
-		// data->scene.view.y += .05;
-		// sleep(42);
-		dprintf(1, "DONE\n");
-	}
-}
+// 	while (42)
+// 	{
+// 		ptr = window.data;
+// 		y = 0;
+// 		while (y < HEIGHT)
+// 		{
+// 			x = 0;
+// 			while (x < WIDTH)
+// 			{
+// 				color = get_color(data, x, y);
+// 				cast = (int *)ptr;
+// 				*cast = color;
+// 				++x;
+// 				ptr += 4;
+// 			}
+// 			++y;
+// 		}
+// 		mlx_put_image_to_window(window.mlx_ptr, window.mlx_win, window.img, 0, 0);
+// 		mlx_do_sync(window.mlx_ptr);
+// 	}
+// }
 
 void			draw_scene(t_data *data)
 {
@@ -239,16 +168,8 @@ void			draw_scene(t_data *data)
 	window.img = mlx_new_image(window.mlx_ptr, WIDTH, HEIGHT);
 	window.data = mlx_get_data_addr(window.img, &(window.bpp),
 		&(window.line_size), &(window.endian));
-	loop(data, window);
-			// raytrace(data, window);
-	// mlx_hook(window.mlx_win, KEYPRESS, KEYPRESSMASK, key_press, &window);
-	// mlx_loop_hook(window.mlx_ptr, refresh, &window);
-	// mlx_loop(window.mlx_ptr);
-			// mlx_do_sync(window.mlx_ptr);
-	// sleep(42);
-	// while (42);
+	raytrace(data, window);
 	mlx_destroy_window(window.mlx_ptr, window.mlx_win);
-	// (void)scene;
 }
 
 int		main(int ac, char **av)

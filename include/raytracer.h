@@ -16,6 +16,11 @@
 # define OPEN_OUTRO "\"\n"
 # define UNKNOWN "Unknown form, stopping\n"
 # define VERBOSE 1
+# define NAME "RTV1"
+# define WIDTH 640
+# define HEIGHT 480
+# define MIN(a, b) (((a) < (b)) ? (a) : (b))
+# define MAX(a,b) ((a) > (b) ? (a) : (b)) 
 
 typedef struct			s_header
 {
@@ -67,6 +72,19 @@ typedef struct			s_data
 	double				t;
 }						t_data;
 
+typedef struct	s_window
+{
+	void		*mlx_ptr;
+	void		*mlx_win;
+	void		*img;
+	char		*data;
+	int			bpp;
+	int			line_size;
+	int			endian;
+}				t_window;
+
+void					raytrace(t_data *data, t_window window);
+int						get_color(t_data *data, int x, int y);
 void					init_scene(int fd, t_scene *scene);
 void					delete_scene(t_scene scene);
 void					describe_materials(t_scene scene);

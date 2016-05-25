@@ -27,7 +27,7 @@ FILES	=	scene.c						\
 			ray/ray.c					\
 			forms/hit.c
 
-DRAW_FILES		=	draw.c
+DRAW_FILES		=	draw.c draw/raytrace.c
 CREATE_FILES	=	create.c
 DESCRIBE_FILES	=	describe.c
 
