@@ -92,7 +92,7 @@ int					get_color(t_data *data, int x, int y)
 						MIN(data->color[2] * 255.0f, 255)));
 }
 
-void				raytrace(t_data *data, t_window window)
+void				raytrace(t_data *data)
 {
 	int				x;
 	int				y;
@@ -100,23 +100,18 @@ void				raytrace(t_data *data, t_window window)
 	char			*ptr;
 	int				*cast;
 
-	while (42)
+	ptr = data->window.data;
+	y = 0;
+	while (y < HEIGHT)
 	{
-		ptr = window.data;
-		y = 0;
-		while (y < HEIGHT)
+		x = 0;
+		while (x < WIDTH)
 		{
-			x = 0;
-			while (x < WIDTH)
-			{
-				color = get_color(data, x++, y);
-				cast = (int *)ptr;
-				*cast = color;
-				ptr += 4;
-			}
-			++y;
+			color = get_color(data, x++, y);
+			cast = (int *)ptr;
+			*cast = color;
+			ptr += 4;
 		}
-		mlx_put_image_to_window(window.mlx_ptr, window.mlx_win, window.img, 0, 0);
-		mlx_do_sync(window.mlx_ptr);
+		++y;
 	}
 }

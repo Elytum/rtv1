@@ -19,20 +19,28 @@
 #include <forms.h>
 #include <float.h>
 
+int				refresh(t_window *window)
+{
+	mlx_put_image_to_window(window->mlx_ptr,
+			window->mlx_win, window->img, 0, 0);
+	mlx_do_sync(window->mlx_ptr);
+	return (0);
+}
+
 void			draw_scene(t_data *data)
 {
-	t_window	window;
-
-	if ((window.mlx_ptr = mlx_init()) == NULL)
+	if ((data->window.mlx_ptr = mlx_init()) == NULL)
 		return ;
-	if ((window.mlx_win = mlx_new_window(window.mlx_ptr,
+	if ((data->window.mlx_win = mlx_new_window(data->window.mlx_ptr,
 			WIDTH, HEIGHT, NAME)) == NULL)
 		return ;
-	window.img = mlx_new_image(window.mlx_ptr, WIDTH, HEIGHT);
-	window.data = mlx_get_data_addr(window.img, &(window.bpp),
-		&(window.line_size), &(window.endian));
-	raytrace(data, window);
-	mlx_destroy_window(window.mlx_ptr, window.mlx_win);
+	data->window.img = mlx_new_image(data->window.mlx_ptr, WIDTH, HEIGHT);
+	data->window.data = mlx_get_data_addr(data->window.img, &(data->window.bpp),
+		&(data->window.line_size), &(data->window.endian));
+	raytrace(data);
+	mlx_expose_hook(data->window.mlx_win, refresh, &data->window);
+	mlx_loop(data->window.mlx_ptr);
+	mlx_destroy_window(data->window.mlx_ptr, data->window.mlx_win);
 }
 
 int				stop(t_data *data)

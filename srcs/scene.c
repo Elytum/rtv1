@@ -29,11 +29,37 @@ static void		*extract_data(int fd, int size)
 	return (ret);
 }
 
+static char		valid_scene(const t_header header)
+{
+	if (header.materials_nb > 10000 ||
+		header.lights_nb > 10000 ||
+		header.planes_nb > 10000 ||
+		header.spheres_nb > 10000 ||
+		header.cylinders_nb > 10000 ||
+		header.cones_nb > 10000)
+	{
+		write(2, TOO_BIG, sizeof(TOO_BIG));
+		return (0);
+	}
+	return (1);
+}
+
+static char		file_ended(const int fd)
+{
+	char		c;
+
+	if (read(fd, &c, 1) == 0)
+		return (1);
+	write(2, EXTRA_DATA, sizeof(EXTRA_DATA));
+	return (0);
+}
+
 void			init_scene(int fd, t_scene *scene)
 {
 	t_header	header;
 
-	if (!(read(fd, &header, sizeof(header)) == sizeof(header)))
+	if (!(read(fd, &header, sizeof(header)) == sizeof(header)) ||
+		!valid_scene(header))
 		exit(0);
 	scene->materials = extract_data(fd,
 		sizeof(t_material) * header.materials_nb);
@@ -43,6 +69,8 @@ void			init_scene(int fd, t_scene *scene)
 	scene->cylinders = extract_data(fd,
 		sizeof(t_cylinder) * header.cylinders_nb);
 	scene->cones = extract_data(fd, sizeof(t_cone) * header.cones_nb);
+	if (!file_ended(fd))
+		exit(0);
 	scene->camera_x = header.camera_x;
 	scene->camera_y = header.camera_y;
 	scene->camera_z = header.camera_z;
