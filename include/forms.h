@@ -71,13 +71,11 @@ typedef enum	s_form
 #define PLANES_INTRO "Planes:\n"
 #define SPHERES_INTRO "Spheres:\n"
 #define CYLINDERS_INTRO "Cylinders:\n"
-#define CYLINDERS_FINITE_INTRO "Cylinders finite:\n"
 #define CONES_INTRO "Cones:\n"
 
 #include <cone.h>
 #include <cylinder.h>
 #include <plane.h>
 #include <sphere.h>
-#include <cylinder_finite.h>
 
 #endif

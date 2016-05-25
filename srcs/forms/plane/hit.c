@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   hit.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: achazal <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/03/08 22:38:26 by achazal           #+#    #+#             */
+/*   Updated: 2016/03/08 22:38:32 by achazal          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <math.h>
 #include <forms.h>
 
@@ -9,7 +21,6 @@ int				hit_plane(const t_ray ray, const t_plane plane, double *t)
 	if (dv == 0)
 		return (0);
 	tmp = (-vec3_dot(plane.normal, vec3_sub(ray.start, plane.coord))) / dv;
-	// tmp = (-vec3_dot(plane.normal, vec3_sub(plane.coord, ray.start))) / dv;
 	if (tmp < 0.1 || tmp > *t)
 		return (0);
 	*t = tmp;
@@ -25,9 +36,10 @@ int				plane_normal(t_data *data)
 		data->normal = plane.normal;
 	else
 		data->normal = vec3_reverse(plane.normal);
-	// data->material = data->scene.materials[data->scene.planes[data->closest[1]].m];
-	data->material = data->scene.materials[data->scene.planes[data->closest[1]].m];
-	data->new_start = vec3_add(data->viewray.start, vec3_mult(data->viewray.dir, data->t));
+	data->material = data->scene.materials[
+						data->scene.planes[data->closest[1]].m];
+	data->new_start = vec3_add(data->viewray.start,
+						vec3_mult(data->viewray.dir, data->t));
 	return (1);
 }
 

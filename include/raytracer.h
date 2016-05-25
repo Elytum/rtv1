@@ -77,9 +77,9 @@ void					describe_lights(t_scene scene);
 void					describe_planes(t_scene scene);
 void					describe_spheres(t_scene scene);
 void					describe_cylinders(t_scene scene);
-void					describe_cylinders_finite(t_scene scene);
 void					describe_cones(t_scene scene);
 void					describe_scene(t_scene scene);
 int						find_closest(t_data *data, const int get_normal);
+int						solve_quadratic(double a, double b, double c, double *t);
 
 #endif

@@ -15,8 +15,6 @@ void	describe_scene(t_scene scene)
 		describe_spheres(scene);
 	if (scene.cylinders_nb)
 		describe_cylinders(scene);
-	if (scene.cylinders_finite_nb)
-		describe_cylinders_finite(scene);
 	if (scene.cones_nb)
 		describe_cones(scene);
 }
