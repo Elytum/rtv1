@@ -25,7 +25,6 @@ void	create_header(int fd)
 	h.planes_nb = 2;
 	h.spheres_nb = 1;
 	h.cylinders_nb = 1;
-	h.cylinders_finite_nb = 0;
 	h.cones_nb = 1;
 	write(fd, &h, sizeof(h));
 }
@@ -56,7 +55,7 @@ void	create_materials(int fd)
 	add_element(fd, &m, sizeof(m));
 
 	/* Plan */
-	m.c = .2;
+	m.c = 0;
 	m.r = 1;
 	m.g = 1;
 	m.b = 0;

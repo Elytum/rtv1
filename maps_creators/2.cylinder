@@ -25,7 +25,6 @@ void	create_header(int fd)
 	h.planes_nb = 0;
 	h.spheres_nb = 0;
 	h.cylinders_nb = 1;
-	h.cylinders_finite_nb = 0;
 	h.cones_nb = 0;
 	write(fd, &h, sizeof(h));
 }

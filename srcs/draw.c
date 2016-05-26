@@ -64,7 +64,7 @@ int				main(int ac, char **av)
 		write(2, FORMAT_OUTRO, sizeof(FORMAT_OUTRO) - 1);
 		return (1);
 	}
-	if ((fd = open(av[1], O_RDONLY | O_CREAT)) == -1)
+	if ((fd = open(av[1], O_RDONLY)) == -1)
 	{
 		write(2, OPEN_INTRO, sizeof(OPEN_INTRO) - 1);
 		write(2, av[1], strlen(av[1]));
