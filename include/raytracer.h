@@ -22,6 +22,13 @@
 
 # include <ray.h>
 
+# define LIGHTS_REFLECTION 1
+# define VERBOSE 0
+
+# define NAME "RTV1"
+# define WIDTH 640
+# define HEIGHT 480
+
 # define FORMAT_INTRO "Wrong format: "
 # define FORMAT_OUTRO " <OUTPUT FILE>\n"
 # define OPEN_INTRO "Couldn't open file \""
@@ -29,10 +36,6 @@
 # define UNKNOWN "Unknown form, stopping\n"
 # define TOO_BIG "Your scene is too big to be handled\n"
 # define EXTRA_DATA "Your scene is corrupted\n"
-# define VERBOSE 1
-# define NAME "RTV1"
-# define WIDTH 640
-# define HEIGHT 480
 # define MIN(a, b) (((a) < (b)) ? (a) : (b))
 # define MAX(a,b) ((a) > (b) ? (a) : (b))
 

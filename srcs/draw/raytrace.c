@@ -72,7 +72,8 @@ int					get_color(t_data *data, int x, int y)
 	double			reflet;
 
 	init_data(data, x, y);
-	while (data->once || (data->coef > 0.0f && data->level < 3))
+	while (data->once || (data->coef > 0.0f &&
+			data->level < LIGHTS_REFLECTION + 1))
 	{
 		data->once = 0;
 		data->t = DBL_MAX;
